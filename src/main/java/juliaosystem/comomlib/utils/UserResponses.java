@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * @description Recibe en el parametro E la entidad  es escargada de Costruir las respuestas Revisar Enum ResponseType
- * @Autor daniel juliao
+ *  Recibe en el parametro E la entidad  es escargada de Costruir las respuestas Revisar Enum ResponseType
+ *  importante int tipoRespuesta se puede ver o definir en ResponseType
+ * @author  daniel juliao
  * @param <E> entidad
+ *  {@link ResponseType}
  * @version 1
  */
 public class UserResponses<E> {
@@ -27,6 +29,8 @@ public class UserResponses<E> {
      * @param tipoRespuesta Código que representa el tipo de respuesta deseada.
      * @param e             La entidad que se incluirá en la respuesta.
      * @return Una instancia de PlantillaResponse que representa la respuesta construida.
+     * {@link ResponseType}
+     *  {@link PlantillaResponse}
      * @throws IllegalArgumentException Si el tipo de respuesta proporcionado no es válido.
      */
     public PlantillaResponse<E> buildResponse(int tipoRespuesta, E e , List<E> listE) {
