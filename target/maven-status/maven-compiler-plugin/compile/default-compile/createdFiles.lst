@@ -8,11 +8,13 @@ juliaosystem/comomlib/api/dtos/ImageDTO$ImageDTOBuilder.class
 juliaosystem/comomlib/utils/pdf/PdfImageExtractor.class
 juliaosystem/comomlib/api/response/PlantillaResponse.class
 juliaosystem/comomlib/api/dtos/RolDTO.class
+juliaosystem/comomlib/utils/test/MethodSizeAndParametersCondition$1.class
 juliaosystem/comomlib/utils/MensajesRespuesta.class
 juliaosystem/comomlib/api/dtos/PropertyTypeDTO.class
 juliaosystem/comomlib/api/dtos/AddresDTO$AddresDTOBuilder.class
 juliaosystem/comomlib/api/mappers/ReactiveMapperMonoGetDto.class
 juliaosystem/comomlib/infractructure/adapters/primary/CrudServiceAdapter.class
+juliaosystem/comomlib/utils/test/MethodSizeAndParametersCondition.class
 juliaosystem/comomlib/api/dtos/RolDTO$RolDTOBuilder.class
 juliaosystem/comomlib/api/dtos/UserRepresentationDTO$UserRepresentationDTOBuilder.class
 juliaosystem/comomlib/api/dtos/UserRolDTO$UserRolDTOBuilder.class
@@ -34,6 +36,7 @@ juliaosystem/comomlib/api/dtos/PhoneDTO$PhoneDTOBuilder.class
 juliaosystem/comomlib/utils/excel/ExcelReaderUtil$1.class
 juliaosystem/comomlib/utils/MensajesRespuesta$MensajesRespuestaBuilder.class
 juliaosystem/comomlib/api/dtos/UserRepresentationDTO.class
+juliaosystem/comomlib/utils/test/ArchitectureTest.class
 juliaosystem/comomlib/api/dtos/CountryDTO$CountryDTOBuilder.class
 juliaosystem/comomlib/api/dtos/EstatesUserDTO$EstatesUserDTOBuilder.class
 juliaosystem/comomlib/api/dtos/CountryDTO.class
@@ -43,6 +46,7 @@ juliaosystem/comomlib/api/dtos/DatesUserDTO.class
 juliaosystem/comomlib/api/dtos/CityDTO.class
 juliaosystem/comomlib/api/dtos/UserDTO$UserDTOBuilder.class
 juliaosystem/comomlib/api/dtos/accessDTO.class
+juliaosystem/comomlib/utils/test/ArchitectureTest$1.class
 juliaosystem/comomlib/api/dtos/KeycloakRequestDTO.class
 juliaosystem/comomlib/api/dtos/CityDTO$CityDTOBuilder.class
 juliaosystem/comomlib/api/dtos/PropertyTypeDTO$PropertyTypeDTOBuilder.class

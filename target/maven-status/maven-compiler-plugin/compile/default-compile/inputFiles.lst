@@ -7,11 +7,13 @@
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/utils/enums/ResponseType.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/dtos/PhoneDTO.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/dtos/RolDTO.java
+/home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/utils/test/MethodSizeAndParametersCondition.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/utils/enums/EmailValidationPattern.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/dtos/AddresDTO.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/mappers/ReactiveMapperMonoGetDto.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/infractructure/adapters/primary/CrudServiceAdapter.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/dtos/accessDTO.java
+/home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/utils/test/ArchitectureTest.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/mappers/ReactiveMapperMonoGetEntity.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/api/dtos/ImageDTO.java
 /home/juliao-sistem/Documentos/desarrollo/backend/maven-lib-common/src/main/java/juliaosystem/comomlib/utils/enums/MensajesRespuesta.java
