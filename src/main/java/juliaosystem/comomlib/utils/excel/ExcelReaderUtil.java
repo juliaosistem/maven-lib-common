@@ -1,6 +1,5 @@
 package juliaosystem.comomlib.utils.excel;
 
-import juliaosystem.comomlib.utils.errors.AbtractError;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -14,23 +13,21 @@ import java.util.List;
 
 
 /**
- * @description clase para leer documentos excel
+ * clase para leer documentos excel
  * @author daniel juliao
  * @version 1
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 
-public class ExcelReaderUtil extends AbtractError {
+public class ExcelReaderUtil  {
 
 
         public static List<List<String>> readExcelFile(MultipartFile file) throws  IOException  {
             List<List<String>> data = new ArrayList<>();
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> rowIterator = sheet.iterator();
 
-            while (rowIterator.hasNext()) {
-                Row row = rowIterator.next();
+            for (Row row : sheet) {
                 Iterator<Cell> cellIterator = row.cellIterator();
                 List<String> rowData = new ArrayList<>();
                 while (cellIterator.hasNext()) {

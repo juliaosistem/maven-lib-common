@@ -35,6 +35,7 @@ public enum ResponseType {
         return code;
     }
 
+
     public String getMessage() {
         return message;
     }
@@ -47,6 +48,14 @@ public enum ResponseType {
         return httpStatus;
     }
 
+    public  static  ResponseType fromMessage(String message){
+        for (ResponseType responseType : ResponseType.values()) {
+            if (responseType.message.equalsIgnoreCase(message)) {
+                return responseType;
+            }
+        }
+        return ResponseType.FALLO;
+    }
     public static ResponseType fromCode(int code) {
         for (ResponseType responseType : ResponseType.values()) {
             if (responseType.code == code) {

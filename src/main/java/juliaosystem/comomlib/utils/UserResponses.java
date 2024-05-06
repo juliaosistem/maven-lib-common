@@ -3,10 +3,6 @@ package juliaosystem.comomlib.utils;
 import
 juliaosystem.comomlib.api.response.PlantillaResponse;
 import juliaosystem.comomlib.utils.enums.ResponseType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
