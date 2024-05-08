@@ -13,7 +13,8 @@ public enum MensajesRespuesta {
     FALLO("Algo salió mal"),
 
     USER_ISFOUND("El usuario ya se encuentra registrado"),
-    USER_lOGEADO("Datos Correctos");
+    USER_lOGEADO("Datos Correctos"),
+    FALLO_CREATE_PHONE("Fallo al crear telefono");
 
     private final String mensaje;
 

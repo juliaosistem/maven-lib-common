@@ -17,7 +17,9 @@ public enum ResponseType {
 
     PASSWORD_VALIDATION_FAIL(9, PasswordValidationPattern.PASSWORD_VALIDATION_FAIL.getPattern(), false, HttpStatus.BAD_REQUEST),
     GET(10,MensajesRespuesta.GET.getMensaje(),true,HttpStatus.OK),
-    NO_ENCONTRADO(11, MensajesRespuesta.NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK);
+    NO_ENCONTRADO(11, MensajesRespuesta.NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK),
+    FALLO_CREATE_PHONE(12, MensajesRespuesta.FALLO_CREATE_PHONE.getMensaje(), false, HttpStatus.OK);
+
     private final int code;
 
     private final String message;
