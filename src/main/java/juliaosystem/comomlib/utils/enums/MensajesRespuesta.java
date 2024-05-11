@@ -14,7 +14,8 @@ public enum MensajesRespuesta {
 
     USER_ISFOUND("El usuario ya se encuentra registrado"),
     USER_lOGEADO("Datos Correctos"),
-    FALLO_CREATE_PHONE("Fallo al crear telefono");
+    FALLO_CREATE_PHONE("Fallo al crear telefono"),
+    FALLO_CREATE_DATOS_USER("Fallo al crear datos de usuario");
 
     private final String mensaje;
 

@@ -12,16 +12,12 @@ import org.apache.logging.log4j.Logger;
 public  class AbtractError extends  Exception  {
     protected transient Logger logger = LogManager.getLogger(getClass());
 
-    public void logError(Throwable throwable) {
+    public void logError(Throwable throwable ) {
         logger.error("Error occurred in %s: %s", getClass().getName() + getLocalizedMessage() ,throwable);
     }
 
-    public void logDebug(String message) {
-        logger.debug("Debug message from %s: %s", getClass().getName(), message);
-    }
-
     public void logInfo(String message) {
-        logger.info("Info message from %s: %s", getClass().getName(), message);
+        logger.info(message, getClass().getName());
     }
 
 }
