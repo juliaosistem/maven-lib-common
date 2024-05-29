@@ -11,8 +11,8 @@ juliaosystem/comomlib/api/dtos/RolDTO.class
 juliaosystem/comomlib/utils/test/MethodSizeAndParametersCondition$1.class
 juliaosystem/comomlib/utils/MensajesRespuesta.class
 juliaosystem/comomlib/api/dtos/PropertyTypeDTO.class
-juliaosystem/comomlib/api/dtos/AddresDTO$AddresDTOBuilder.class
 juliaosystem/comomlib/api/mappers/ReactiveMapperMonoGetDto.class
+juliaosystem/comomlib/api/dtos/AddresDTO$AddresDTOBuilder.class
 juliaosystem/comomlib/infractructure/adapters/primary/CrudServiceAdapter.class
 juliaosystem/comomlib/utils/test/MethodSizeAndParametersCondition.class
 juliaosystem/comomlib/api/dtos/RolDTO$RolDTOBuilder.class
@@ -21,8 +21,8 @@ juliaosystem/comomlib/api/dtos/UserRolDTO$UserRolDTOBuilder.class
 juliaosystem/comomlib/api/dtos/CredentialRepresentationDTO$CredentialRepresentationDTOBuilder.class
 juliaosystem/comomlib/utils/enums/EmailValidationPattern.class
 juliaosystem/comomlib/api/dtos/DatesUserDTO$DatesUserDTOBuilder.class
-juliaosystem/comomlib/utils/enums/PermisoEnum.class
 juliaosystem/comomlib/infractructure/adapters/secundary/CrudReactiveServiceInterface.class
+juliaosystem/comomlib/utils/enums/PermisoEnum.class
 juliaosystem/comomlib/utils/excel/ExcelReaderUtil.class
 juliaosystem/comomlib/api/dtos/UserRolDTO.class
 juliaosystem/comomlib/api/mappers/ReactiveMapperMonoGetEntity.class
@@ -49,10 +49,10 @@ juliaosystem/comomlib/api/dtos/accessDTO.class
 juliaosystem/comomlib/utils/test/ArchitectureTest$1.class
 juliaosystem/comomlib/api/dtos/KeycloakRequestDTO.class
 juliaosystem/comomlib/api/dtos/CityDTO$CityDTOBuilder.class
-juliaosystem/comomlib/api/dtos/PropertyTypeDTO$PropertyTypeDTOBuilder.class
 juliaosystem/comomlib/api/dtos/ImageDTO.class
+juliaosystem/comomlib/api/dtos/PropertyTypeDTO$PropertyTypeDTOBuilder.class
 juliaosystem/comomlib/api/mappers/PlantillaMapperGetEntity.class
 juliaosystem/comomlib/utils/enums/PasswordValidationPattern.class
-juliaosystem/comomlib/api/dtos/RegisterUserDTO$RegisterUserDTOBuilder.class
 juliaosystem/comomlib/api/dtos/EstatesUserDTO.class
+juliaosystem/comomlib/api/dtos/RegisterUserDTO$RegisterUserDTOBuilder.class
 juliaosystem/comomlib/utils/enums/MensajesRespuesta.class
