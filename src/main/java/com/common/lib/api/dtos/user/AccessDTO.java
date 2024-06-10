@@ -1,4 +1,4 @@
-package com.juliaosystem.api.dtos.user;
+package com.common.lib.api.dtos.user;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class accessDTO {
+public class AccessDTO {
     @JsonProperty("manageGroupMembership")
     private  boolean manageGroupMembership;
 
