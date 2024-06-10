@@ -1,9 +1,0 @@
-  ____ _  _ ____ _  _ ____ ____ _ ___  ____ ____
-  | __ |\/| |  | |\ | |__| |___ | |  \ |___ [__
-  |__] |  | |__| | \| |  | |___ | |__/ |___ ___]
-
-  Application: ${spring.application.name}
-  Spring Boot version: ${spring-boot.version}
-  JDK version: ${java.version}
- 
-
