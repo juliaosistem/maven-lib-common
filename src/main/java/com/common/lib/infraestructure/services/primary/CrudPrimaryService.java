@@ -1,8 +1,8 @@
 package com.common.lib.infraestructure.services.primary;
 
 import com.common.lib.api.response.PlantillaResponse;
+import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 /**
  *
@@ -12,16 +12,18 @@ PlantillaResponse<E>> objeto de respuesta estándar
  * @author : Daniel Juliao
  * @param <E>   Class entidad
  * @param <R> Class request
+ * @param <I>  id de la entidad
  * @implNote  interface  encargada de definir   todos los metodos que se usan para los cruds en las clases adapter
  * @version 1
  */
-public interface CrudPrimaryService<R,E> {
+@Service
+public interface CrudPrimaryService<R,E,I> {
 
-    default PlantillaResponse<E> all(UUID id, Long idBusiness) {
+    default PlantillaResponse<E> all(I id, Long idBussines) {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> add(R e) {
+    default PlantillaResponse<E> add(R e,I id) {
         return new PlantillaResponse<>();
     }
 
@@ -29,7 +31,7 @@ public interface CrudPrimaryService<R,E> {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> delete(R e) {
+    default PlantillaResponse<E> delete(I e) {
         return new PlantillaResponse<>();
     }
 }

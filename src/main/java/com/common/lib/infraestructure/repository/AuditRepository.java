@@ -1,7 +1,6 @@
 package com.common.lib.infraestructure.repository;
 
 import com.common.lib.infraestructure.entitis.Audit;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

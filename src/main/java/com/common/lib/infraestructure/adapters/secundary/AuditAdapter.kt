@@ -1,4 +1,4 @@
-package com.common.lib.infraestructure.adapters.secundary;
+package com.common.lib.infraestructure.adapters.secundary
 
 import com.common.lib.api.dtos.request.AuditRequest
 import com.common.lib.api.mappers.AuditMapper
@@ -9,6 +9,7 @@ import com.common.lib.infraestructure.services.secundary.CrudSecundaryService
 import com.common.lib.utils.UserResponses
 import com.common.lib.utils.enums.ResponseType
 import com.common.lib.utils.errors.AbtractError
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -18,9 +19,9 @@ class AuditAdapter (
     private val abtractError: AbtractError,
     private val userResponses: UserResponses<AuditResponse>,
     private val mapper: AuditMapper
-): CrudSecundaryService<AuditRequest, AuditResponse> {
+) {
 
-    override fun all(): PlantillaResponse<AuditResponse> {
+    fun all(): PlantillaResponse<AuditResponse> {
       return  try {
             val response = mapper.mapList(auditRepository.findAll())
           if (response.isEmpty()){
@@ -37,7 +38,7 @@ class AuditAdapter (
         }
     }
 
-    override fun byId(id: UUID): PlantillaResponse<AuditResponse> {
+   fun byId(id: UUID): PlantillaResponse<AuditResponse> {
         return try {
             val response = auditRepository.findById(id)
             if (response.isPresent) {
@@ -53,21 +54,21 @@ class AuditAdapter (
         }
     }
 
-    override fun delete(e: AuditRequest): PlantillaResponse<AuditResponse> {
+    fun delete(id: UUID ): PlantillaResponse<AuditResponse> {
       return  try {
-               auditRepository.deleteById(e.id)
-               userResponses.buildResponse(ResponseType.DELETED.code,AuditResponse.builder().id(e.id).proceso(e.proceso).build())
+               auditRepository.deleteById(id)
+               userResponses.buildResponse(ResponseType.DELETED.code,AuditResponse.builder().id(id).build())
          } catch (e: Exception) {
             abtractError.logError(e)
              userResponses.buildResponse(ResponseType.FALLO.code, AuditResponse())
         }
     }
 
-    override fun byIdBussines(idBusiness: Long): PlantillaResponse<AuditResponse> {
+   fun byIdBussines(idBusiness: Long): PlantillaResponse<AuditResponse> {
         return try {
-            val response = auditRepository.findByIdBussines(idBusiness);
+            val response = auditRepository.findByIdBussines(idBusiness)
             if (response.isNotEmpty()) {
-                val res = mapper.mapList(response);
+                val res = mapper.mapList(response)
                 abtractError.logInfo("AuditAdapter.byIdBussines() :  ${ResponseType.GET.message} - de auditoria")
                 userResponses.buildResponse(ResponseType.GET.code,res.first(), res)
             } else {
@@ -80,9 +81,9 @@ class AuditAdapter (
         }
     }
 
-    override fun add(e: AuditRequest?): PlantillaResponse<AuditResponse> {
+    fun add(e: AuditRequest?): PlantillaResponse<AuditResponse> {
        return  try {
-             val  response = mapper.map(auditRepository.save(mapper.map(e)));
+             val  response = mapper.map(auditRepository.save(mapper.map(e)))
             abtractError.logInfo("AuditAdapter.add() :  La auditoria fue  ${ResponseType.CREATED.message}")
              userResponses.buildResponse(ResponseType.CREATED.code,  response)
         } catch (e: Exception) {
