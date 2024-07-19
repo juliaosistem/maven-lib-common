@@ -45,6 +45,6 @@ public class UserRepresentationDTO {
     private int notBefore;
 
     @JsonProperty("access")
-    private accessDTO access;
+    private AccessDTO access;
 
 }

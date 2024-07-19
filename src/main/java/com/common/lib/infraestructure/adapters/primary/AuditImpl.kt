@@ -3,8 +3,11 @@ package com.common.lib.infraestructure.adapters.primary
 import com.common.lib.api.dtos.request.AuditRequest
 import com.common.lib.api.response.AuditResponse
 import com.common.lib.api.response.PlantillaResponse
+import com.common.lib.infraestructure.adapters.secundary.AuditAdapter
 import com.common.lib.infraestructure.services.primary.CrudPrimaryService
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService
+import lombok.NoArgsConstructor
+import org.springframework.beans.factory.annotation.Qualifier
 
 
 import org.springframework.stereotype.Service
@@ -15,8 +18,9 @@ import java.util.*
  * Requiere de  E   que es la entidad que responden los metodos y la R que es la request de los metodos y todos los metodos .
  *
  * @author  Daniel Juliao
- * @param E   Class entidad
- * @param R  Class request
+ * @param <E>   Class entidad
+ * @param <R>  Class request
+ * @param <I>  tipo de dato del id de la entidad
  * @property PlantillaResponse  objeto de respuesta estándar requiere el parametro E
  * @return PlantillaResponse<E>
  * @version 1
@@ -24,20 +28,20 @@ import java.util.*
 
 @Service
 class AuditImpl(
-    val auditService: CrudSecundaryService<AuditRequest, AuditResponse>,
-): CrudPrimaryService<AuditRequest, AuditResponse> {
+    private  val auditService: AuditAdapter,
+)  {
 
-    override fun delete(e: AuditRequest): PlantillaResponse<AuditResponse> {
-        val res = auditService.byId(e.id)
-          return if (res.isRta) auditService.delete(e)
-                    else res
+    fun delete(id: UUID): PlantillaResponse<AuditResponse> {
+        val res:PlantillaResponse<AuditResponse> = auditService.byId(id)
+        return if (res.isRta) auditService.delete(id)
+        else res
     }
 
-    override fun update(e: AuditRequest): PlantillaResponse<AuditResponse> {
-        val res = auditService.byId(e.id)
-        return if (res.isRta) auditService.update(e)
-                 else res
-    }
+//   fun update(e: AuditRequest): PlantillaResponse<AuditResponse> {
+//        val res = auditService.byId(e.id)
+//        return if (res.isRta) auditService.update(e)
+//                 else res
+//    }
 
 
     /**
@@ -50,9 +54,9 @@ class AuditImpl(
      * @version 1
      */
 
-    override fun all(id: UUID?, idBusiness: Long?): PlantillaResponse<AuditResponse> {
-          if (id != null ) return auditService.byId(id)
+    fun all(id: UUID?, idBusiness: Long?): PlantillaResponse<AuditResponse> {
+        if (id != null ) return auditService.byId(id)
         return if (idBusiness != null) auditService.byIdBussines(idBusiness)
-                   else auditService.all()
+        else auditService.all()
     }
 }

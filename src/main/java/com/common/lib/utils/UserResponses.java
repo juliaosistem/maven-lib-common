@@ -3,6 +3,7 @@ package com.common.lib.utils;
 import
         com.common.lib.api.response.PlantillaResponse;
 import com.common.lib.utils.enums.ResponseType;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  *  {@link ResponseType}
  * @version 1
  */
+@Component
 public class UserResponses<E> {
     public PlantillaResponse<E> buildResponse(int tipoRespuesta, E e) {
         return buildResponse(tipoRespuesta, e, null);
