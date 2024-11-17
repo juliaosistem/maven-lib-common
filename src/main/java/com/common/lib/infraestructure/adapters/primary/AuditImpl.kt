@@ -28,13 +28,13 @@ import java.util.*
 
 @Service
 class AuditImpl(
-   private  val auditService: AuditAdapter,
+    private  val auditService: AuditAdapter,
 )  {
 
     fun delete(id: UUID): PlantillaResponse<AuditResponse> {
         val res:PlantillaResponse<AuditResponse> = auditService.byId(id)
-          return if (res.isRta) auditService.delete(id)
-                    else res
+        return if (res.isRta) auditService.delete(id)
+        else res
     }
 
 //   fun update(e: AuditRequest): PlantillaResponse<AuditResponse> {
@@ -54,9 +54,9 @@ class AuditImpl(
      * @version 1
      */
 
-     fun all(id: UUID?, idBusiness: Long?): PlantillaResponse<AuditResponse> {
-          if (id != null ) return auditService.byId(id)
+    fun all(id: UUID?, idBusiness: Long?): PlantillaResponse<AuditResponse> {
+        if (id != null ) return auditService.byId(id)
         return if (idBusiness != null) auditService.byIdBussines(idBusiness)
-                   else auditService.all()
+        else auditService.all()
     }
 }

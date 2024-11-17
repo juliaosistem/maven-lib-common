@@ -1,15 +1,13 @@
-package com.common.lib.infraestructure.adapters.secundary
+package com.common.lib.infraestructure.adapters.secundary;
 
 import com.common.lib.api.dtos.request.AuditRequest
 import com.common.lib.api.mappers.AuditMapper
 import com.common.lib.api.response.AuditResponse
 import com.common.lib.api.response.PlantillaResponse
 import com.common.lib.infraestructure.repository.AuditRepository
-import com.common.lib.infraestructure.services.secundary.CrudSecundaryService
 import com.common.lib.utils.UserResponses
 import com.common.lib.utils.enums.ResponseType
 import com.common.lib.utils.errors.AbtractError
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -22,15 +20,15 @@ class AuditAdapter (
 ) {
 
     fun all(): PlantillaResponse<AuditResponse> {
-      return  try {
+        return  try {
             val response = mapper.mapList(auditRepository.findAll())
-          if (response.isEmpty()){
-              abtractError.logInfo("AuditAdapter.all() :  ${ResponseType.GET.message} - de auditoria")
-              userResponses.buildResponse(ResponseType.NO_ENCONTRADO.code,AuditResponse())
-          }else {
-              abtractError.logInfo("AuditAdapter.all() :  ${ResponseType.GET.message} - de auditoria")
-              userResponses.buildResponse(ResponseType.GET.code, response.first(), response)
-          }
+            if (response.isEmpty()){
+                abtractError.logInfo("AuditAdapter.all() :  ${ResponseType.GET.message} - de auditoria")
+                userResponses.buildResponse(ResponseType.NO_ENCONTRADO.code,AuditResponse())
+            }else {
+                abtractError.logInfo("AuditAdapter.all() :  ${ResponseType.GET.message} - de auditoria")
+                userResponses.buildResponse(ResponseType.GET.code, response.first(), response)
+            }
 
         } catch (e: Exception) {
             abtractError.logError(e)
@@ -38,7 +36,7 @@ class AuditAdapter (
         }
     }
 
-   fun byId(id: UUID): PlantillaResponse<AuditResponse> {
+    fun byId(id: UUID): PlantillaResponse<AuditResponse> {
         return try {
             val response = auditRepository.findById(id)
             if (response.isPresent) {
@@ -55,16 +53,16 @@ class AuditAdapter (
     }
 
     fun delete(id: UUID ): PlantillaResponse<AuditResponse> {
-      return  try {
-               auditRepository.deleteById(id)
-               userResponses.buildResponse(ResponseType.DELETED.code,AuditResponse.builder().id(id).build())
-         } catch (e: Exception) {
+        return  try {
+            auditRepository.deleteById(id)
+            userResponses.buildResponse(ResponseType.DELETED.code,AuditResponse.builder().id(id).build())
+        } catch (e: Exception) {
             abtractError.logError(e)
-             userResponses.buildResponse(ResponseType.FALLO.code, AuditResponse())
+            userResponses.buildResponse(ResponseType.FALLO.code, AuditResponse())
         }
     }
 
-   fun byIdBussines(idBusiness: Long): PlantillaResponse<AuditResponse> {
+    fun byIdBussines(idBusiness: Long): PlantillaResponse<AuditResponse> {
         return try {
             val response = auditRepository.findByIdBussines(idBusiness)
             if (response.isNotEmpty()) {
@@ -82,10 +80,10 @@ class AuditAdapter (
     }
 
     fun add(e: AuditRequest?): PlantillaResponse<AuditResponse> {
-       return  try {
-             val  response = mapper.map(auditRepository.save(mapper.map(e)))
+        return  try {
+            val  response = mapper.map(auditRepository.save(mapper.map(e)))
             abtractError.logInfo("AuditAdapter.add() :  La auditoria fue  ${ResponseType.CREATED.message}")
-             userResponses.buildResponse(ResponseType.CREATED.code,  response)
+            userResponses.buildResponse(ResponseType.CREATED.code,  response)
         } catch (e: Exception) {
             abtractError.logError(e)
             userResponses.buildResponse(ResponseType.FALLO.code, AuditResponse())
@@ -94,8 +92,3 @@ class AuditAdapter (
 
 
 }
-
-
-
-
-

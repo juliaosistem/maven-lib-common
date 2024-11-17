@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class DefaultCrudController<RES, RQ, E,I>(
-    private val defualtService: DefualtService<RQ,RES,I>,
+    private val defualtService: DefualtService<RQ,RES,E,I>,
 ) : CrudController<RES, RQ, E,I> {
 
     override fun add(
@@ -28,7 +28,10 @@ class DefaultCrudController<RES, RQ, E,I>(
             .build()
 
         val response = defualtService.add(entidad,id, audit)
-        return ResponseEntity(response, response.httpStatus)
+        if (response != null) {
+            return ResponseEntity(response, response.httpStatus)
+        }
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
     }
 
     override fun all(
@@ -36,7 +39,7 @@ class DefaultCrudController<RES, RQ, E,I>(
         ip: String,
         dominio: String,
         usuario: String,
-        idBussines: Long,
+        idBussines: Long?,
         proceso: String
     ): ResponseEntity<PlantillaResponse<RES>> {
         val audit = AuditRequest.builder()
@@ -46,7 +49,10 @@ class DefaultCrudController<RES, RQ, E,I>(
             .build()
 
         val response = defualtService.all(id, idBussines, audit)
-        return ResponseEntity(response, response.httpStatus)
+        if (response != null) {
+            return ResponseEntity(response, response.httpStatus)
+        }
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
     }
 
     override fun update(

@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
  *
  * @apiNote
  * Requiere de  E   que es la entidad que responden los metodos y la R que es la request de los metodos y todos los metodos retonar
-       PlantillaResponse<E>> objeto de respuesta estándar
+PlantillaResponse<E>> objeto de respuesta estándar
  * @author : Daniel Juliao
  * @param <E>   Class entidad
  * @param <R>   Class respuesta
- * @param  <I>   Class ID    
+ * @param  <I>   Class ID
  * @implNote  interface  encargada de definir   todos los metodos que se usan para los cruds en las clases adapter
  * @version 1
  */

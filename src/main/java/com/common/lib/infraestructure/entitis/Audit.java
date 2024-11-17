@@ -1,5 +1,4 @@
 package com.common.lib.infraestructure.entitis;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

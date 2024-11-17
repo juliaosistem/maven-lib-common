@@ -1,6 +1,7 @@
 package com.common.lib.api.dtos;
 
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.core.io.UrlResource;
 
 import java.io.IOException;
