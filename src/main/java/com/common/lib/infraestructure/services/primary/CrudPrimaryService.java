@@ -17,7 +17,7 @@ PlantillaResponse<E>> objeto de respuesta estándar
  * @version 1
  */
 @Service
-public interface CrudPrimaryService<R,E,I> {
+public interface CrudPrimaryService<RES, RQ, E, I> {
 
     default PlantillaResponse<E> all(I id, Long idBussines) {
         return new PlantillaResponse<>();

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="My Custom PMD Ruleset">
+    <!-- Regla para la longitud del método -->
+    <rule ref="rulesets/java/optimizations.xml/ExcessiveMethodLength">
+        <priority>3</priority>
+        <properties>
+            <property name="methodLength" value="22"/>
+            <property name="ignoreJavadoc" value="true"/> <!-- Ignora los comentarios Javadoc -->
+        </properties>
+    </rule>
+
+    <!-- Regla para el número de parámetros -->
+    <rule ref="rulesets/java/codestyle.xml/AvoidLongParameterList">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" value="3"/>
+        </properties>
+    </rule>
+</ruleset>

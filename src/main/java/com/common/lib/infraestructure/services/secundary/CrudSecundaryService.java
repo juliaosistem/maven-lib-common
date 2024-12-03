@@ -6,39 +6,40 @@ import org.springframework.stereotype.Service;
 /**
  *
  * @apiNote
- * Requiere de  E   que es la entidad que responden los metodos y la R que es la request de los metodos y todos los metodos retonar
-PlantillaResponse<E>> objeto de respuesta estándar
+ * Requiere de RES que es la entidad que responden los metodos y la RQ que es la request de los metodos y todos los metodos retonar
+PlantillaResponse<RES>> objeto de respuesta estándar
  * @author : Daniel Juliao
  * @param <E>   Class entidad
- * @param <R>   Class respuesta
+ * @param <RES>>   Class Response
+ * @param <RQ>   Class Request
  * @param  <I>   Class ID
- * @implNote  interface  encargada de definir   todos los metodos que se usan para los cruds en las clases adapter
+ * @implNote  interface encargada de definir todos los metodos que se usan para los cruds en las clases adapter
  * @version 1
  */
 @Service
-public interface CrudSecundaryService<R,E,I> {
+public interface CrudSecundaryService<RES, RQ, E, I> {
 
-    default PlantillaResponse<E> all() {
+    default PlantillaResponse<RES> all() {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> byIdBussines(Long idBusiness) {
+    default PlantillaResponse<RES> byIdBussines(Long idBusiness) {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> byId(I id) {
+    default PlantillaResponse<RES> byId(I id) {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> add(R e) {
+    default PlantillaResponse<RES> add(RQ e) {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> update(R e) {
+    default PlantillaResponse<RES> update(RQ e) {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<E> delete(I e) {
+    default PlantillaResponse<RES> delete(I e) {
         return new PlantillaResponse<>();
     }
 }

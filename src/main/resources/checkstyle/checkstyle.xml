@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle configuration="http://checkstyle.sourceforge.net/config.xml">
+    <module name="Checker">
+        <module name="TreeWalker">
+            <!-- Regla para la longitud de los métodos -->
+            <module name="MethodLength">
+                <property name="max" value="22"/>
+                <property name="ignoreJavadoc" value="true"/> <!-- Ignora los comentarios Javadoc -->
+            </module>
+
+            <!-- Regla para el número de parámetros -->
+            <module name="ParameterNumber">
+                <property name="max" value="3"/>
+            </module>
+        </module>
+    </module>
+</checkstyle>
