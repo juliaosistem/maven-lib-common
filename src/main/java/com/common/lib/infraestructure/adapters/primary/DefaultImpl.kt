@@ -6,9 +6,9 @@ import com.common.lib.infraestructure.services.secundary.CrudSecundaryService
 import org.springframework.stereotype.Service
 
 @Service
-open class DefaultImpl<RES ,RQ,I>(
-      private  val crudSecondaryService : CrudSecundaryService<RQ, RES, I>
-): CrudPrimaryService<RQ, RES, I> {
+open class DefaultImpl<RES, RQ, E,I>(
+      private  val crudSecondaryService : CrudSecundaryService<RES, RQ, E,I>
+): CrudPrimaryService<RES, RQ, E,I> {
 
     override fun all(id: I?, idBusiness: Long?): PlantillaResponse<RES> {
         if (id != null ) return crudSecondaryService.byId(id)

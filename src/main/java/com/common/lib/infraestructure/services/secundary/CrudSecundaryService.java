@@ -16,7 +16,7 @@ PlantillaResponse<RES>> objeto de respuesta estándar
  * @implNote  interface encargada de definir todos los metodos que se usan para los cruds en las clases adapter
  * @version 1
  */
-@Service
+
 public interface CrudSecundaryService<RES, RQ, E, I> {
 
     default PlantillaResponse<RES> all() {
