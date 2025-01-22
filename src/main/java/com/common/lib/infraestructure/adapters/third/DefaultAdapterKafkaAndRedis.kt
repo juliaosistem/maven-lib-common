@@ -19,7 +19,7 @@ import java.time.Duration
 class DefaultAdapterKafkaAndRedis<RES>(
     private val redisFeignClient: RedisFeignClient<RES>,
     private val kafkaFeignClient: McsKafkaFeignClient<RES>,
-)  {
+) {
 
     /**
      * Reintenta solo Kafka utilizando el endpoint específico.
@@ -41,11 +41,6 @@ class DefaultAdapterKafkaAndRedis<RES>(
     fun retryRedis(redisMessage: KafkaMessage): Mono<RedisResponse<RES>> {
         return redisFeignClient.sendToRedis(redisMessage)
     }
-
-
-
-
-
 
 
     /**
@@ -116,7 +111,6 @@ class DefaultAdapterKafkaAndRedis<RES>(
     }
 
 
-
     /**
      * Mapea la respuesta de Kafka a un formato estándar de PlantillaResponse.
      *
@@ -155,8 +149,8 @@ class DefaultAdapterKafkaAndRedis<RES>(
      * @return Mono<KafkaRedisResponse<RES>>
      */
 
-    private fun sendRedisYkafka(body: KafkaMessage):Mono<KafkaRedisResponse<RES>>{
-      return  Mono.zip(
+    private fun sendRedisYkafka(body: KafkaMessage): Mono<KafkaRedisResponse<RES>> {
+        return Mono.zip(
             retryKafka(body),
             retryRedis(body)
         ).flatMap { tuple ->
@@ -168,7 +162,17 @@ class DefaultAdapterKafkaAndRedis<RES>(
             }
             Mono.just(updatedData)
         }
-   }
+    }
+
+    /**
+     *Valida si se debe reintentar a kafka o redis y reintenta .
+     *
+     * @param body El mensaje que se está enviando.
+     * @param data datos para validar reintentos
+     * @param waitTime tiempo de espera para  reintentos
+     * @param maxRetries maximos  reintentos
+     * @return Un Mono con la respuesta del servicio.
+     */
 
     private  fun validarRetry(body: KafkaMessage,data: KafkaRedisResponse<RES>, waitTime: Long, maxRetries :Int): Mono<KafkaRedisResponse<RES>> {
         if (!data.kafka.success && data.redis.success) {
