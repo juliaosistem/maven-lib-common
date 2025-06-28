@@ -5,7 +5,7 @@ import com.common.lib.api.response.PlantillaResponse
 import org.springframework.stereotype.Component
 
 @Component
-class DefualtService<RQ,RES,E,I>(
+class DefualtService<RES, RQ, E, I>(
 ) {
 
     fun  add(entidad: RQ, id: I?,audit: AuditRequest?): PlantillaResponse<RES>? {

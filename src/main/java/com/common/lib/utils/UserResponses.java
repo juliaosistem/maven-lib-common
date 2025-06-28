@@ -4,8 +4,10 @@ import
         com.common.lib.api.response.PlantillaResponse;
 import com.common.lib.utils.enums.ResponseType;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+
 
 /**
  *  Recibe en el parametro E la entidad  es escargada de Costruir las respuestas Revisar Enum ResponseType
@@ -44,5 +46,18 @@ public class UserResponses<E> {
         }
 
         throw new IllegalArgumentException("Tipo de respuesta no válido: " + tipoRespuesta);
+    }
+
+    /**
+     * Crea un Observable que emite la respuesta construida.
+     *
+     * @param tipoRespuesta Código que representa el tipo de respuesta deseada.
+     * @param e             La entidad que se incluirá en la respuesta.
+     * @param listE         Lista de entidades adicionales.
+     * @return Observable que emite la respuesta de tipo PlantillaResponse.
+     */
+    public Mono<PlantillaResponse<E>> buildResponseObserver( int tipoRespuesta ,  E e, List<E>listE ) {
+        var response =  buildResponse(tipoRespuesta, e, listE);;
+        return Mono.just(response);
     }
 }
