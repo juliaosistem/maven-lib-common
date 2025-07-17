@@ -7,9 +7,10 @@
     <groupId>common-lib</groupId>
     <artifactId>common-lib</artifactId>
     <name>common-lib</name>
-    <version>1.1</version>
+    <version>${revision}</version>
 
     <properties>
+        <revision>0.0.0</revision>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <spring-boot.version>3.2.0</spring-boot.version>
@@ -29,7 +30,18 @@
         <lombok-version>1.18.32</lombok-version>
     </properties>
 
-
+<distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Releases</name>
+            <url>https://nexus.juliaosistem-server.in/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshots</name>
+            <url>https://nexus.juliaosistem-server.in/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -51,8 +63,6 @@
     </dependencyManagement>
 
     <dependencies>
-
-
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
@@ -407,6 +417,31 @@
                         <version>${lombok-version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+              <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

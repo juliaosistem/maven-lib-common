@@ -1,0 +1,70 @@
+pipeline {
+  agent any
+
+  environment {
+    NEXUS_URL = "http://nexus.juliaosistem-server.in:8081"
+    GROUP_ID = "com.tuempresa"
+    ARTIFACT_ID = "maven-lib-common"
+    
+    // Versión dinámica: rama + número de build
+    VERSION = sh(script: '''
+      if [ "$BRANCH_NAME" = "master" ]; then
+        echo "release-${BUILD_NUMBER}"
+      else
+        BRANCH_SANITIZED=$(echo "${BRANCH_NAME}" | sed 's/[^a-zA-Z0-9]/-/g')
+        echo "${BRANCH_SANITIZED}-${BUILD_NUMBER}"
+      fi
+    ''', returnStdout: true).trim()
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+        script {
+          echo "Building version: ${VERSION}"
+          // Determina el repositorio (release/snapshot)
+          env.REPOSITORY = (env.BRANCH_NAME == 'master') ? 
+            'maven-releases' : 'maven-snapshots'
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        sh "mvn clean package -Dversion=${VERSION}"
+      }
+    }
+
+    stage('Deploy to Nexus') {
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: 'nexus-creds',
+          usernameVariable: 'NEXUS_USER',
+          passwordVariable: 'NEXUS_PASS'
+        )]) {
+          sh """
+            mvn deploy:deploy-file \
+              -DgroupId=${GROUP_ID} \
+              -DartifactId=${ARTIFACT_ID} \
+              -Dversion=${VERSION} \
+              -Dpackaging=jar \
+              -Dfile=target/${ARTIFACT_ID}-*.jar \
+              -DrepositoryId=nexus \
+              -Durl=${NEXUS_URL}/repository/${REPOSITORY} \
+              -DgeneratePom=true
+          """
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      slackSend(
+        channel: '#builds',
+        message: "✅ Artefacto publicado: ${GROUP_ID}:${ARTIFACT_ID}:${VERSION} en ${REPOSITORY}"
+      )
+    }
+  }
+}
