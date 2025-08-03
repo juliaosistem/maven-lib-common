@@ -47,19 +47,19 @@ public class DatesUser {
     private Estates state;
 
 
-    @Override
-    public String toString() {
-        return "DatesUser{" +
-                "idDatesUser=" + idDatesUser +
-                ", firstName='" + firstName + '\'' +
-                ", idUrl='" + idUrl + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", phone=" + phone +
-                ", addresses=" + addresses +
-                ", user=" + (user != null ? user.getId_usuario() : null) +
-                ", state=" + (state != null ? state.getIdEstate() : null) +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "DatesUser{" +
+//                "idDatesUser=" + idDatesUser +
+//                ", firstName='" + firstName + '\'' +
+//                ", idUrl='" + idUrl + '\'' +
+//                ", secondName='" + secondName + '\'' +
+//                ", phone=" + phone +
+//                ", addresses=" + addresses +
+//                ", user=" + (user != null ? user.getDatesUser() : null) +
+//                ", state=" + (state != null ? state.getIdEstate() : null) +
+//                '}';
+//    }
 
 
 }

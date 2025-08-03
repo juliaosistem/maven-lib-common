@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Getter
 @Setter
 @Table(name = "paises")
 public class Country {

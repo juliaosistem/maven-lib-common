@@ -1,13 +1,8 @@
 package com.common.lib.infraestructure.adapters.primary
 
-import com.common.lib.api.dtos.request.AuditRequest
 import com.common.lib.api.response.AuditResponse
 import com.common.lib.api.response.PlantillaResponse
 import com.common.lib.infraestructure.adapters.secundary.AuditAdapter
-import com.common.lib.infraestructure.services.primary.CrudPrimaryService
-import com.common.lib.infraestructure.services.secundary.CrudSecundaryService
-import lombok.NoArgsConstructor
-import org.springframework.beans.factory.annotation.Qualifier
 
 
 import org.springframework.stereotype.Service
@@ -33,7 +28,7 @@ class AuditImpl(
 
     fun delete(id: UUID): PlantillaResponse<AuditResponse> {
         val res:PlantillaResponse<AuditResponse> = auditService.byId(id)
-        return if (res.isRta) auditService.delete(id)
+        return if (res.rta) auditService.delete(id)
         else res
     }
 

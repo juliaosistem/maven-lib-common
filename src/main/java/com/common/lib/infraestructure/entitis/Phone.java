@@ -3,16 +3,14 @@ package com.common.lib.infraestructure.entitis;
 import lombok.*;
 
 import jakarta.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Getter
-@Setter
 @Table(name = "phones")
 public class Phone {
     @Id
@@ -37,15 +35,15 @@ public class Phone {
     @JoinColumn(name = "id_datos_usuario",updatable = false, insertable = false)
     private DatesUser datesUser;
 
-    @Override
-    public String toString() {
-        return "Phone{" +
-                "id=" + id +
-                ", number='" + number + '\'' +
-                ", city=" + (city != null ? city.getIdCity() : null) +
-                ", country=" + (country != null ? country.getIdCountry() : null) +
-                ", datesUser=" + (datesUser != null ? datesUser.getIdDatesUser() : null) +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Phone{" +
+//                "id=" + id +
+//                ", number='" + number + '\'' +
+//                ", city=" + (city != null ? city.getIdCity() : null) +
+//                ", country=" + (country != null ? country.: null) +
+//                ", datesUser=" + (datesUser != null ? datesUser.getIdDatesUser() : null) +
+//                '}';
+//    }
 
 }
