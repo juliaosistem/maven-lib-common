@@ -18,13 +18,13 @@ open class DefaultImpl<RES, RQ, E,I>(
 
     override fun delete(id:I): PlantillaResponse<RES> {
         val res:PlantillaResponse<RES> = crudSecondaryService.byId(id)
-        return if (res.isRta) crudSecondaryService.delete(id)
+        return if (res.rta) crudSecondaryService.delete(id)
         else res
     }
 
     override fun add(e: RQ , id: I): PlantillaResponse<RES> {
         val  res = crudSecondaryService.byId(id)
-        return if (res.isRta) res
+        return if (res.rta) res
         else {
             crudSecondaryService.add(e)
         }

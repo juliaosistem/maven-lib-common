@@ -5,9 +5,9 @@ import lombok.Data
 
 @Data
 @Builder
-class RedisResponse<T>(
+class RedisResponse<RES>(
     success: Boolean,
     message: String,
     error: String?,
-    data: T?
-) : ServiceResponse<T>(success, message, error, data)
+    data: RES
+) : ServiceResponse<RES>(success, message, error, data)

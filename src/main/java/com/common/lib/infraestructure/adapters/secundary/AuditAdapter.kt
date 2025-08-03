@@ -1,4 +1,4 @@
-package com.common.lib.infraestructure.adapters.secundary;
+package com.common.lib.infraestructure.adapters.secundary
 
 import com.common.lib.api.dtos.request.AuditRequest
 import com.common.lib.api.mappers.AuditMapper
