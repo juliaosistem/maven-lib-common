@@ -1,59 +1,69 @@
 package com.common.lib.api.controller
 
 import com.common.lib.api.response.PlantillaResponse
-import com.common.lib.utils.RequestHeaders
-import org.springframework.http.HttpStatus
+import com.common.lib.utils.QueryParams
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-
 import reactor.core.publisher.Mono
 
 /**
- * Recibe en el parámetro E la entidad del body. Es encargada de construir los controladores.
- * @Author: Daniel Juliao
- * @param RES Clase Response
- * @param RQ Clase request
- * @param E Entidad
- * @param I Tipo de dato de la entidad
- * @property PlantillaResponse
- * @return ResponseEntity<Mono<PlantillaResponse<RES>>> Objeto de respuesta estándar reactivo
- * @version 2
+ * Interfaz para los controladores CRUD, equivalente a la interfaz TypeScript.
+ * @param RES Clase de respuesta
+ * @param RQ Clase de solicitud
  */
-interface CrudController<RES, RQ, E, I> {
+interface CrudController<RES, RQ> {
 
     @PostMapping("/add")
     fun add(
-        @RequestBody(required = true) entidad: RQ,
-        @RequestHeader headers: RequestHeaders<I>
-    ): ResponseEntity<Mono<PlantillaResponse<RES>>> {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
-    }
+        @RequestBody request: RQ,
+        @RequestHeader queryParams: QueryParams,
+        res: ResponseEntity<PlantillaResponse<RES>>
+    ): ResponseEntity<PlantillaResponse<RES>>
 
     @GetMapping("/all")
     fun all(
-        @RequestParam filters: Map<String, String>,
-        @RequestHeader headers: RequestHeaders<I>
-    ): ResponseEntity<Mono<PlantillaResponse<RES>>> {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
-
-    }
+        @RequestHeader queryParams: QueryParams,
+        res: ResponseEntity<PlantillaResponse<RES>>,
+        @RequestParam(required = false) filters: Map<String, String>?
+    ): ResponseEntity<PlantillaResponse<RES>>
 
     @PutMapping("/update")
     fun update(
-        @RequestBody entidad: RQ,
-        @RequestHeader headers: RequestHeaders<I>
-    ): ResponseEntity<Mono<PlantillaResponse<RES>>> {
-        // Lógica para actualizar
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
+        @RequestBody request: RQ,
+        @RequestHeader queryParams: QueryParams
+    ): Mono<PlantillaResponse<RES>>
 
-    }
-
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete")
     fun delete(
-        @PathVariable id: I,
-        @RequestHeader headers: RequestHeaders<I>
-    ): ResponseEntity<Mono<PlantillaResponse<RES>>> {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build()
+        @RequestHeader queryParams: QueryParams,
+        res: ResponseEntity<PlantillaResponse<RES>>
+    ): ResponseEntity<PlantillaResponse<RES>>
+}
+    ): ResponseEntity<PlantillaResponse<RES>>
 
-    }
+    @PutMapping("/update")
+    fun update(
+        @RequestBody request: RQ,
+        @RequestHeader id: String?,
+        @RequestHeader ip: String,
+        @RequestHeader dominio: String,
+        @RequestHeader usuario: String,
+        @RequestHeader(required = false) idbusiness: Int?,
+        @RequestHeader proceso: String,
+        @RequestHeader topic: String,
+        @RequestHeader(required = false) token: String?
+    ): Mono<PlantillaResponse<RES>>
+
+    @DeleteMapping("/delete")
+    fun delete(
+        @RequestHeader id: String?,
+        @RequestHeader ip: String,
+        @RequestHeader dominio: String,
+        @RequestHeader usuario: String,
+        @RequestHeader(required = false) idbusiness: Int?,
+        @RequestHeader proceso: String,
+        @RequestHeader topic: String,
+        @RequestHeader(required = false) token: String?,
+        res: ResponseEntity<PlantillaResponse<RES>>
+    ): ResponseEntity<PlantillaResponse<RES>>
 }
