@@ -1,6 +1,5 @@
 package com.common.lib.infraestructure.repository
 
-
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.NoRepositoryBean
@@ -8,7 +7,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
-
 
 @NoRepositoryBean
 interface DefaultRepository<E, I> : JpaRepository<E, I>, JpaSpecificationExecutor<E> {
@@ -38,9 +36,9 @@ interface DefaultRepository<E, I> : JpaRepository<E, I>, JpaSpecificationExecuto
         val pageable: Pageable = PageRequest.of(pagina, tamanoPagina, Sort.by(sortOrder, sortBy))
 
         return if (id != null && idBusiness != null) {
-            findById(id, pageable)
+            findByIdWithPageable(id, pageable)
         } else if (id != null) {
-            findById(id, pageable)
+            findByIdWithPageable(id, pageable)
         } else if (idBusiness != null) {
             findByIdBusiness(idBusiness, pageable)
         } else {
@@ -56,7 +54,7 @@ interface DefaultRepository<E, I> : JpaRepository<E, I>, JpaSpecificationExecuto
      *
      * @return Un objeto `Page<E>` que contiene los resultados filtrados por `id` y paginados.
      */
-    fun findById(id: I, pageable: Pageable): Page<E>
+    fun findByIdWithPageable(id: I, pageable: Pageable): Page<E>
 
     /**
      * Método que obtiene los elementos filtrados por `idBusiness` con paginación.

@@ -3,7 +3,7 @@ package com.common.lib.infraestructure.adapters.secundary
 import com.common.lib.api.dtos.request.AuditRequest
 import com.common.lib.api.mappers.AuditMapper
 import com.common.lib.api.response.AuditResponse
-import com.common.lib.api.response.PlantillaResponse
+import com.common.lib.utils.PlantillaResponse
 import com.common.lib.infraestructure.repository.AuditRepository
 import com.common.lib.utils.UserResponses
 import com.common.lib.utils.enums.ResponseType
@@ -62,15 +62,15 @@ class AuditAdapter (
         }
     }
 
-    fun byIdBussines(idBusiness: Long): PlantillaResponse<AuditResponse> {
+    fun byIdBusiness(idBusiness: Long): PlantillaResponse<AuditResponse> {
         return try {
-            val response = auditRepository.findByIdBussines(idBusiness)
+            val response = auditRepository.findByIdBusiness(idBusiness)
             if (response.isNotEmpty()) {
                 val res = mapper.mapList(response)
-                abtractError.logInfo("AuditAdapter.byIdBussines() :  ${ResponseType.GET.message} - de auditoria")
+                abtractError.logInfo("AuditAdapter.byIdBusiness() :  ${ResponseType.GET.message} - de auditoria")
                 userResponses.buildResponse(ResponseType.GET.code,res.first(), res)
             } else {
-                abtractError.logInfo("AuditAdapter.byIdBussines() :  ${ResponseType.NO_ENCONTRADO.message} - de auditoria")
+                abtractError.logInfo("AuditAdapter.byIdBusiness() :  ${ResponseType.NO_ENCONTRADO.message} - de auditoria")
                 userResponses.buildResponse(ResponseType.NO_ENCONTRADO.code, AuditResponse())
             }
         } catch (e: Exception) {
@@ -90,5 +90,14 @@ class AuditAdapter (
         }
     }
 
-
+    fun update(e: AuditRequest?): PlantillaResponse<AuditResponse> {
+        return try {
+            val response = mapper.map(auditRepository.save(mapper.map(e)))
+            abtractError.logInfo("AuditAdapter.update() :  La auditoria fue  ${ResponseType.UPDATED.message}")
+            userResponses.buildResponse(ResponseType.UPDATED.code, response)
+        } catch (e: Exception) {
+            abtractError.logError(e)
+            userResponses.buildResponse(ResponseType.FALLO.code, AuditResponse())
+        }
+    }
 }

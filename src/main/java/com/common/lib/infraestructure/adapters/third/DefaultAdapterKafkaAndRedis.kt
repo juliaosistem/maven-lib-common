@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux
 import reactor.util.retry.Retry
 import java.time.Duration
 
-@Component
+// @Component - Comentado temporalmente para deshabilitar Kafka durante pruebas de CRUD
 class DefaultAdapterKafkaAndRedis<RES>(
     private val redisFeignClient: RedisFeignClient<RES>,
     private val kafkaFeignClient: McsKafkaFeignClient<RES>,
@@ -174,8 +174,8 @@ class DefaultAdapterKafkaAndRedis<RES>(
 //                    else ->
 //                        ServiceResponse(
 //                            success = false,
-//                            message = ResponseType.FALLO.message,
-//                            error = null,
+//                            message = "Error en ambos servicios",
+//                            error = "Kafka y Redis fallaron",
 //                            data = null
 //                        )
 //                }

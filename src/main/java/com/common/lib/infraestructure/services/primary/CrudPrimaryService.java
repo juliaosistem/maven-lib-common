@@ -1,8 +1,6 @@
 package com.common.lib.infraestructure.services.primary;
 
-import com.common.lib.api.response.PlantillaResponse;
-import org.springframework.stereotype.Service;
-
+import com.common.lib.utils.PlantillaResponse;
 
 /**
  *
@@ -17,22 +15,21 @@ PlantillaResponse<RES>> objeto de respuesta estándar
  * @implNote  interface  encargada de definir   todos los metodos que se usan para los cruds en las clases adapter
  * @version 1
  */
-@Service
 public interface CrudPrimaryService<RES, RQ, E, I> {
 
-    default PlantillaResponse<RES> all(I id, Long idBussines) {
-        return new PlantillaResponse<>();
-    }
+    PlantillaResponse<RES> all();
 
-    default PlantillaResponse<RES> add(RQ e,I id) {
-        return new PlantillaResponse<>();
-    }
+    PlantillaResponse<RES> byId(I id);
 
-    default PlantillaResponse<RES> update(RQ e) {
-        return new PlantillaResponse<>();
-    }
+    PlantillaResponse<RES> add(RQ e);
 
-    default PlantillaResponse<RES> delete(I e) {
-        return new PlantillaResponse<>();
+    PlantillaResponse<RES> delete(I id);
+
+    PlantillaResponse<RES> update(RQ e);
+
+    PlantillaResponse<RES> byIdBusiness(Long idBusiness);
+
+    default PlantillaResponse<RES> all(I id, Long idBusiness) {
+        return null;
     }
 }

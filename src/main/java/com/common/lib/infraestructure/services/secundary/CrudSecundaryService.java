@@ -1,6 +1,6 @@
 package com.common.lib.infraestructure.services.secundary;
 
-import com.common.lib.api.response.PlantillaResponse;
+import com.common.lib.utils.PlantillaResponse;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,7 +23,7 @@ public interface CrudSecundaryService<RES, RQ, E, I> {
         return new PlantillaResponse<>();
     }
 
-    default PlantillaResponse<RES> byIdBussines(Long idBusiness) {
+    default PlantillaResponse<RES> byIdBusiness(Long idBusiness) {
         return new PlantillaResponse<>();
     }
 

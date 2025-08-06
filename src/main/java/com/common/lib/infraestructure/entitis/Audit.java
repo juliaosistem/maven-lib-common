@@ -27,7 +27,7 @@ public class Audit {
     private String ip;
     private String dominio;
     private String usuario;
-    private Long idBussines;
+    private Long idBusiness;
     private String proceso;
 
     @CreationTimestamp
@@ -44,7 +44,7 @@ public class Audit {
                 ", ip='" + ip + '\'' +
                 ", dominio='" + dominio + '\'' +
                 ", usuario='" + usuario + '\'' +
-                ", idBussines=" + idBussines +
+                ", idBusiness=" + idBusiness +
                 ", proceso='" + proceso + '\'' +
                 ", timestamp=" + timestamp.format(formatter) +
                 ", logs='" + logs + '\'' +

@@ -1,7 +1,6 @@
 package com.common.lib.api.controller
 
-import com.common.lib.api.response.PlantillaResponse
-import com.common.lib.utils.QueryParams
+import com.common.lib.utils.PlantillaResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
@@ -16,54 +15,51 @@ interface CrudController<RES, RQ> {
     @PostMapping("/add")
     fun add(
         @RequestBody request: RQ,
-        @RequestHeader queryParams: QueryParams,
-        res: ResponseEntity<PlantillaResponse<RES>>
+        @RequestHeader("id") id: String?,
+        @RequestHeader("ip") ip: String,
+        @RequestHeader("dominio") dominio: String,
+        @RequestHeader("usuario") usuario: String,
+        @RequestHeader("idbusiness", required = false) idbusiness: Int?,
+        @RequestHeader("proceso") proceso: String,
+        @RequestHeader("topic") topic: String,
+        @RequestHeader("token", required = false) token: String?
     ): ResponseEntity<PlantillaResponse<RES>>
 
     @GetMapping("/all")
     fun all(
-        @RequestHeader queryParams: QueryParams,
-        res: ResponseEntity<PlantillaResponse<RES>>,
+        @RequestHeader("id") id: String?,
+        @RequestHeader("ip") ip: String,
+        @RequestHeader("dominio") dominio: String,
+        @RequestHeader("usuario") usuario: String,
+        @RequestHeader("idbusiness", required = false) idbusiness: Int?,
+        @RequestHeader("proceso") proceso: String,
+        @RequestHeader("topic") topic: String,
+        @RequestHeader("token", required = false) token: String?,
         @RequestParam(required = false) filters: Map<String, String>?
     ): ResponseEntity<PlantillaResponse<RES>>
 
     @PutMapping("/update")
     fun update(
         @RequestBody request: RQ,
-        @RequestHeader queryParams: QueryParams
+        @RequestHeader("id") id: String?,
+        @RequestHeader("ip") ip: String,
+        @RequestHeader("dominio") dominio: String,
+        @RequestHeader("usuario") usuario: String,
+        @RequestHeader("idbusiness", required = false) idbusiness: Int?,
+        @RequestHeader("proceso") proceso: String,
+        @RequestHeader("topic") topic: String,
+        @RequestHeader("token", required = false) token: String?
     ): Mono<PlantillaResponse<RES>>
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     fun delete(
-        @RequestHeader queryParams: QueryParams,
-        res: ResponseEntity<PlantillaResponse<RES>>
-    ): ResponseEntity<PlantillaResponse<RES>>
-}
-    ): ResponseEntity<PlantillaResponse<RES>>
-
-    @PutMapping("/update")
-    fun update(
-        @RequestBody request: RQ,
-        @RequestHeader id: String?,
-        @RequestHeader ip: String,
-        @RequestHeader dominio: String,
-        @RequestHeader usuario: String,
-        @RequestHeader(required = false) idbusiness: Int?,
-        @RequestHeader proceso: String,
-        @RequestHeader topic: String,
-        @RequestHeader(required = false) token: String?
-    ): Mono<PlantillaResponse<RES>>
-
-    @DeleteMapping("/delete")
-    fun delete(
-        @RequestHeader id: String?,
-        @RequestHeader ip: String,
-        @RequestHeader dominio: String,
-        @RequestHeader usuario: String,
-        @RequestHeader(required = false) idbusiness: Int?,
-        @RequestHeader proceso: String,
-        @RequestHeader topic: String,
-        @RequestHeader(required = false) token: String?,
-        res: ResponseEntity<PlantillaResponse<RES>>
+        @PathVariable id: String,
+        @RequestHeader("ip") ip: String,
+        @RequestHeader("dominio") dominio: String,
+        @RequestHeader("usuario") usuario: String,
+        @RequestHeader("idbusiness", required = false) idbusiness: Int?,
+        @RequestHeader("proceso") proceso: String,
+        @RequestHeader("topic") topic: String,
+        @RequestHeader("token", required = false) token: String?
     ): ResponseEntity<PlantillaResponse<RES>>
 }

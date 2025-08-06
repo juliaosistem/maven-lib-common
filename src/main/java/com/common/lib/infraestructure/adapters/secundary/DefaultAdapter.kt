@@ -1,6 +1,6 @@
 package com.common.lib.infraestructure.adapters.secundary
 import com.common.lib.api.mappers.GenericMapper
-import com.common.lib.api.response.PlantillaResponse
+import com.common.lib.utils.PlantillaResponse
 import com.common.lib.infraestructure.repository.DefaultRepository
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService
 import com.common.lib.utils.TimeUtils
@@ -8,6 +8,7 @@ import com.common.lib.utils.UserResponses
 import com.common.lib.utils.enums.ResponseType
 import com.common.lib.utils.errors.AbtractError
 import org.springframework.stereotype.Service
+import org.springframework.data.domain.PageRequest
 
 /**
  * Implementación abstracta de un adaptador para operaciones CRUD en el repositorio.
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service
  * @param I El tipo del identificador único de la entidad.
  */
 @Service
-abstract class DefaultAdapter<RES, RQ, E, I>(
+abstract class DefaultAdapter<RES, RQ, E : Any, I>(
     private val mapper: GenericMapper<RES, RQ, E>,
     private val abstractError: AbtractError,
     private val userResponses: UserResponses<RES>,
@@ -39,7 +40,7 @@ abstract class DefaultAdapter<RES, RQ, E, I>(
         return TimeUtils.measureExecutionTime {
             try {
                 val response = mapper.mapListToRes(defaultRepository.All().content.toList(), resClass)
-                validareResponse(response);
+                validareResponse(response)
             } catch (e: Exception) {
                 abstractError.logError(e)
                 userResponses.buildResponse(ResponseType.FALLO.code, null)
@@ -49,14 +50,13 @@ abstract class DefaultAdapter<RES, RQ, E, I>(
 
 
     private fun validareResponse(response : List<RES>) :PlantillaResponse<RES> {
-        return   if (response.isEmpty()) {
+        return if (response.isEmpty()) {
             abstractError.logInfo("res.all() :  ${ResponseType.GET.message} ")
             userResponses.buildResponse(ResponseType.NO_ENCONTRADO.code, response.firstOrNull())
         } else {
             abstractError.logInfo("DefaultAdapter.all() :  ${ResponseType.GET.message} - ${response[0]}")
             userResponses.buildResponse(ResponseType.GET.code, response.firstOrNull(), response)
         }
-
     }
 
 
@@ -103,15 +103,27 @@ abstract class DefaultAdapter<RES, RQ, E, I>(
     }
 
     /**
-     * Recupera un registro específico de negocio por su identificador único.
+     * Recupera registros por el identificador del negocio.
      *
-     * @param idBusiness El identificador único del recurso de negocio.
-     * @return Respuesta con el recurso encontrado o un mensaje de error si no se encuentra.
+     * @param idBusiness El identificador del negocio.
+     * @return Respuesta con una lista de elementos de tipo `RES` (respuesta).
      */
-    override fun byIdBussines(idBusiness: Long): PlantillaResponse<RES> {
+    override fun byIdBusiness(idBusiness: Long): PlantillaResponse<RES> {
         return TimeUtils.measureExecutionTime {
             try {
-                val response = mapper.mapListToRes(defaultRepository.All(null ,idBusiness).content.toList(), resClass)
+                // Para el repositorio genérico, usamos findAll y filtramos
+                val allEntities = defaultRepository.findAll()
+                val filteredEntities = allEntities.filter { entity ->
+                    try {
+                        val field = entity.javaClass.getDeclaredField("idBusiness")
+                        field.isAccessible = true
+                        val value = field.get(entity) as? Long
+                        value == idBusiness
+                    } catch (e: Exception) {
+                        false
+                    }
+                }
+                val response = mapper.mapListToRes(filteredEntities, resClass)
                 validareResponse(response)
             } catch (e: Exception) {
                 abstractError.logError(e)
@@ -120,21 +132,37 @@ abstract class DefaultAdapter<RES, RQ, E, I>(
         }
     }
 
-
     /**
      * Agrega un nuevo registro al repositorio.
      *
-     * @param request El objeto de tipo `RQ` con los datos del nuevo registro.
+     * @param e Los datos del recurso a crear.
      * @return Respuesta indicando el resultado de la operación.
      */
-    override fun add(request: RQ): PlantillaResponse<RES> {
+    override fun add(e: RQ): PlantillaResponse<RES> {
         return TimeUtils.measureExecutionTime {
             try {
-                val entity = mapper.mapToEntity(request, entityClass)
-                val savedEntity = defaultRepository.save(entity)
-                val response = mapper.mapToRes(savedEntity, resClass)
-                abstractError.logInfo("DefaultAdapter.add() :   ${ResponseType.CREATED.message}")
+                val response = mapper.mapToRes(defaultRepository.save(mapper.mapToEntity(e, entityClass)), resClass)
+                abstractError.logInfo("DefaultAdapter.add() :  ${ResponseType.CREATED.message}")
                 userResponses.buildResponse(ResponseType.CREATED.code, response)
+            } catch (e: Exception) {
+                abstractError.logError(e)
+                userResponses.buildResponse(ResponseType.FALLO.code, null)
+            }
+        }
+    }
+
+    /**
+     * Actualiza un registro existente en el repositorio.
+     *
+     * @param e Los datos del recurso a actualizar.
+     * @return Respuesta indicando el resultado de la operación.
+     */
+    override fun update(e: RQ): PlantillaResponse<RES> {
+        return TimeUtils.measureExecutionTime {
+            try {
+                val response = mapper.mapToRes(defaultRepository.save(mapper.mapToEntity(e, entityClass)), resClass)
+                abstractError.logInfo("DefaultAdapter.update() :  ${ResponseType.UPDATED.message}")
+                userResponses.buildResponse(ResponseType.UPDATED.code, response)
             } catch (e: Exception) {
                 abstractError.logError(e)
                 userResponses.buildResponse(ResponseType.FALLO.code, null)

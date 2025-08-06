@@ -1,41 +1,48 @@
 package com.common.lib.api.mappers;
 
-import com.netflix.discovery.provider.Serializer;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
-@Serializer
 public class GenericMapper<RES, RQ, E> {
 
-    private final ModelMapper modelMapper;
-
     public GenericMapper() {
-        this.modelMapper = new ModelMapper();
     }
 
     /**
      * Mapea de un objeto de tipo `E` a un objeto de tipo `RES`.
+     * Esta es una implementación básica que debe ser sobrescrita según las necesidades específicas.
      *
      * @param source El objeto fuente de tipo `E`.
      * @param resClass La clase de tipo `RES`.
      * @return Un objeto mapeado de tipo `RES`.
      */
     public RES mapToRes(E source, Class<RES> resClass) {
-        return modelMapper.map(source, resClass);
+        // Implementación básica - debe ser sobrescrita según las necesidades específicas
+        try {
+            return resClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al mapear objeto", e);
+        }
     }
 
     /**
      * Mapea de un objeto de tipo `RQ` a un objeto de tipo `E`.
+     * Esta es una implementación básica que debe ser sobrescrita según las necesidades específicas.
      *
      * @param source El objeto fuente de tipo `RQ`.
      * @param entityClass La clase de tipo `E`.
      * @return Un objeto mapeado de tipo `E`.
      */
     public E mapToEntity(RQ source, Class<E> entityClass) {
-        return modelMapper.map(source, entityClass);
+        // Implementación básica - debe ser sobrescrita según las necesidades específicas
+        try {
+            return entityClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al mapear objeto", e);
+        }
     }
 
     /**

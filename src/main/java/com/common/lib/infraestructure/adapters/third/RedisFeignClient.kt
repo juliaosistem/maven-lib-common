@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
-@FeignClient(name = "redisClient", url = "\${redis.base-url}")
+// @FeignClient(name = "redisClient", url = "\${redis.base-url}") - Comentado temporalmente para deshabilitar Redis durante pruebas de CRUD
 interface RedisFeignClient <RES> {
 
     /**

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import reactor.core.publisher.Mono
 
-@FeignClient(name = "kafkaClient", url = "\${kafka.base-url}")
+// @FeignClient(name = "kafkaClient", url = "\${kafka.base-url}") - Comentado temporalmente para deshabilitar Kafka durante pruebas de CRUD
 interface McsKafkaFeignClient<RES> {
 
     /**
