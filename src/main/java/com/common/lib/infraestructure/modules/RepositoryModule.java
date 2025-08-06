@@ -13,14 +13,23 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @version 1
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "com.common.lib.infraestructure.repository")
-@EntityScan(basePackages = "com.common.lib.infraestructure.entitis")
+@EnableJpaRepositories(basePackages = {
+    "com.common.lib.infraestructure.repository",
+    "com.juliaosystem.infraestructure.repository"
+})
+@EntityScan(basePackages = {
+    "com.common.lib.infraestructure.entitis",
+    "com.juliaosystem.infraestructure.entitis"
+})
 public class RepositoryModule {
     
     /**
      * Configuración base para repositorios JPA.
      * Este módulo se puede importar en otros microservicios para obtener
      * funcionalidades de repositorio compartidas.
+     * 
+     * NOTA: Se han agregado los paquetes específicos del proyecto juliaosystem
+     * para incluir repositorios y entidades como ExampleRepository y ExampleEntity.
      */
     
     // Aquí se pueden agregar configuraciones específicas para repositorios
