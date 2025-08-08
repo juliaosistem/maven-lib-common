@@ -3,33 +3,50 @@ package com.common.lib.infraestructure.services.primary;
 import com.common.lib.utils.PlantillaResponse;
 
 /**
- *
- * @apiNote
- * Requiere de  E   que es la entidad que responden los metodos y la R que es la request de los metodos y todos los metodos retonar
-PlantillaResponse<RES>> objeto de respuesta estándar
- * @author : Daniel Juliao
- * @param <E>   Class entidad
- * @param <RQ> Class request
- * @param <I>  id de la entidad
- * @param <RES> Class response
- * @implNote  interface  encargada de definir   todos los metodos que se usan para los cruds en las clases adapter
- * @version 1
+ * Interfaz para servicios primarios que manejan operaciones CRUD básicas.
+ * Define los métodos esenciales para operaciones de lectura, escritura, actualización y eliminación.
+ * Sigue los principios SOLID y arquitectura hexagonal.
+ * 
+ * @author Daniel Juliao
+ * @param <RES> Clase de respuesta
+ * @param <RQ> Clase de request
+ * @param <E> Clase entidad
+ * @param <I> Tipo del ID de la entidad
+ * @version 3
  */
 public interface CrudPrimaryService<RES, RQ, E, I> {
 
+    /**
+     * Obtiene todas las entidades.
+     * @return Respuesta con todas las entidades
+     */
     PlantillaResponse<RES> all();
 
+    /**
+     * Obtiene una entidad por su ID.
+     * @param id ID de la entidad
+     * @return Respuesta con la entidad encontrada
+     */
     PlantillaResponse<RES> byId(I id);
 
-    PlantillaResponse<RES> add(RQ e);
+    /**
+     * Crea una nueva entidad.
+     * @param request Datos de la entidad a crear
+     * @return Respuesta con la entidad creada
+     */
+    PlantillaResponse<RES> add(RQ request);
 
+    /**
+     * Actualiza una entidad existente.
+     * @param request Datos de la entidad a actualizar
+     * @return Respuesta con la entidad actualizada
+     */
+    PlantillaResponse<RES> update(RQ request);
+
+    /**
+     * Elimina una entidad por su ID.
+     * @param id ID de la entidad a eliminar
+     * @return Respuesta de confirmación
+     */
     PlantillaResponse<RES> delete(I id);
-
-    PlantillaResponse<RES> update(RQ e);
-
-    PlantillaResponse<RES> byIdBusiness(Long idBusiness);
-
-    default PlantillaResponse<RES> all(I id, Long idBusiness) {
-        return null;
-    }
 }

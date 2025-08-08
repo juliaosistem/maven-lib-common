@@ -11,11 +11,10 @@ open class DefaultImpl<RES, RQ, E, I> : CrudPrimaryService<RES, RQ, E, I> {
     // Implementación por defecto de CrudSecundaryService
     private val crudSecondaryService = object : CrudSecundaryService<RES, RQ, E, I> {
         override fun all(): PlantillaResponse<RES> = PlantillaResponse()
-        override fun byIdBusiness(idBusiness: Long): PlantillaResponse<RES> = PlantillaResponse()
         override fun byId(id: I): PlantillaResponse<RES> = PlantillaResponse()
-        override fun add(e: RQ): PlantillaResponse<RES> = PlantillaResponse()
-        override fun update(e: RQ): PlantillaResponse<RES> = PlantillaResponse()
-        override fun delete(e: I): PlantillaResponse<RES> = PlantillaResponse()
+        override fun add(request: RQ): PlantillaResponse<RES> = PlantillaResponse()
+        override fun update(request: RQ): PlantillaResponse<RES> = PlantillaResponse()
+        override fun delete(id: I): PlantillaResponse<RES> = PlantillaResponse()
     }
 
     override fun all(): PlantillaResponse<RES> {
@@ -26,27 +25,16 @@ open class DefaultImpl<RES, RQ, E, I> : CrudPrimaryService<RES, RQ, E, I> {
         return crudSecondaryService.byId(id)
     }
 
-    override fun add(e: RQ): PlantillaResponse<RES> {
-        return crudSecondaryService.add(e)
+    override fun add(request: RQ): PlantillaResponse<RES> {
+        return crudSecondaryService.add(request)
     }
 
     override fun delete(id: I): PlantillaResponse<RES> {
         return crudSecondaryService.delete(id)
     }
 
-    override fun update(e: RQ): PlantillaResponse<RES> {
-        return crudSecondaryService.update(e)
+    override fun update(request: RQ): PlantillaResponse<RES> {
+        return crudSecondaryService.update(request)
     }
 
-    override fun byIdBusiness(idBusiness: Long): PlantillaResponse<RES> {
-        return crudSecondaryService.byIdBusiness(idBusiness)
-    }
-
-    override fun all(id: I?, idBusiness: Long?): PlantillaResponse<RES> {
-        return when {
-            id != null -> crudSecondaryService.byId(id)
-            idBusiness != null -> crudSecondaryService.byIdBusiness(idBusiness)
-            else -> crudSecondaryService.all()
-        }
-    }
 }

@@ -9,18 +9,17 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 /**
- *  Class servicio encargada de realizar acciones crud para auditoria.
- * Requiere de  E   que es la entidad que responden los metodos y la R que es la request de los metodos y todos los metodos .
+ * Class servicio encargada de realizar acciones crud para auditoria.
+ * Requiere de E que es la entidad que responden los metodos y la R que es la request de los metodos y todos los metodos .
  *
- * @author  Daniel Juliao
- * @param <E>   Class entidad
- * @param <R>  Class request
- * @param <I>  tipo de dato del id de la entidad
- * @property PlantillaResponse  objeto de respuesta estándar requiere el parametro E
+ * @author Daniel Juliao
+ * @param <E> Class entidad
+ * @param <R> Class request
+ * @param <I> tipo de dato del id de la entidad
+ * @property PlantillaResponse objeto de respuesta estándar requiere el parametro E
  * @return PlantillaResponse<E>
- * @version 1
+ * @version 2
  */
-
 @Service
 class AuditImpl(
     private val auditService: AuditAdapter,
@@ -34,8 +33,8 @@ class AuditImpl(
         return auditService.byId(id)
     }
 
-    override fun add(e: AuditRequest): PlantillaResponse<AuditResponse> {
-        return auditService.add(e)
+    override fun add(request: AuditRequest): PlantillaResponse<AuditResponse> {
+        return auditService.add(request)
     }
 
     override fun delete(id: UUID): PlantillaResponse<AuditResponse> {
@@ -44,17 +43,9 @@ class AuditImpl(
         else res
     }
 
-    override fun update(e: AuditRequest): PlantillaResponse<AuditResponse> {
-        return auditService.update(e)
+    override fun update(request: AuditRequest): PlantillaResponse<AuditResponse> {
+        return auditService.update(request)
     }
 
-    override fun byIdBusiness(idBusiness: Long): PlantillaResponse<AuditResponse> {
-        return auditService.byIdBusiness(idBusiness)
-    }
 
-    override fun all(id: UUID?, idBusiness: Long?): PlantillaResponse<AuditResponse> {
-        if (id != null) return auditService.byId(id)
-        return if (idBusiness != null) auditService.byIdBusiness(idBusiness)
-        else auditService.all()
-    }
 }
