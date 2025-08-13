@@ -2,16 +2,21 @@ package com.common.lib.api.controller;
 
 import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.utils.PlantillaResponse;
+import com.common.lib.utils.QueryFilters;
+import com.common.lib.utils.RequestHeaders;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
 /**
  * Controlador CRUD base plug-and-play.
+ * Los métodos usan wrappers tipados para headers y filtros.
  */
-public class DefaultCrudController<RES, RQ, E, I> implements CrudController<RES, RQ> {
+public class DefaultCrudController<RES, RQ, E, I> {
 
     protected final CrudPrimaryService<RES, RQ, E, I> primaryService;
 
@@ -19,9 +24,13 @@ public class DefaultCrudController<RES, RQ, E, I> implements CrudController<RES,
         this.primaryService = primaryService;
     }
 
-    @Override
-    public ResponseEntity<PlantillaResponse<RES>> add(RQ request, String id, String ip, String dominio, String usuario, Long idbusiness, String proceso, String topic, String token) {
-        if (id == null || id.isBlank()) {
+    @PostMapping("/add")
+    public ResponseEntity<PlantillaResponse<RES>> add(
+            @RequestBody RQ request,
+            @RequestHeader HttpHeaders headers
+    ) {
+        RequestHeaders rh = RequestHeaders.from(headers);
+        if (rh.getId() == null || rh.getId().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new PlantillaResponse<>(false, "No llegó parámetro id en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
@@ -29,29 +38,42 @@ public class DefaultCrudController<RES, RQ, E, I> implements CrudController<RES,
         return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
     }
 
-    @Override
-    public ResponseEntity<PlantillaResponse<RES>> all(String id, String ip, String dominio, String usuario, Long idbusiness, String proceso, String topic, String token, Map<String, String> filters) {
+    @GetMapping("/all")
+    public ResponseEntity<PlantillaResponse<RES>> all(
+            @RequestHeader HttpHeaders headers,
+            @RequestParam(required = false) Map<String, String> filters
+    ) {
+        RequestHeaders rh = RequestHeaders.from(headers);
+        // Wrap de filtros para futura compatibilidad
+        QueryFilters qf = new QueryFilters(filters);
         PlantillaResponse<RES> res;
-        if (id != null && !id.isBlank()) {
-            res = primaryService.byId(castId(id));
-        } else if (idbusiness != null) {
-            res = primaryService.byIdBusiness(idbusiness);
+        if (rh.getId() != null && !rh.getId().isBlank()) {
+            res = primaryService.byId(castId(rh.getId()));
+        } else if (rh.getIdbusiness() != null) {
+            res = primaryService.byIdBusiness(rh.getIdbusiness());
         } else {
             res = primaryService.all();
         }
         return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
     }
 
-    @Override
-    public Mono<PlantillaResponse<RES>> update(RQ request, String id, String ip, String dominio, String usuario, Long idbusiness, String proceso, String topic, String token) {
-        if (id == null || id.isBlank()) {
+    @PutMapping("/update")
+    public Mono<PlantillaResponse<RES>> update(
+            @RequestBody RQ request,
+            @RequestHeader HttpHeaders headers
+    ) {
+        RequestHeaders rh = RequestHeaders.from(headers);
+        if (rh.getId() == null || rh.getId().isBlank()) {
             return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
         return Mono.just(primaryService.update(request));
     }
 
-    @Override
-    public ResponseEntity<PlantillaResponse<RES>> delete(String id, String ip, String dominio, String usuario, Long idbusiness, String proceso, String topic, String token) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<PlantillaResponse<RES>> delete(
+            @PathVariable String id,
+            @RequestHeader HttpHeaders headers
+    ) {
         PlantillaResponse<RES> res = primaryService.delete(castId(id));
         return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
     }

@@ -17,7 +17,7 @@ En el microservicio (`mcs-plantilla-spring`), añade:
 </dependency>
 ```
 
-Si desea heredar versiones y plugins vía POM padre, crea un módulo padre (packaging pom) y referencia como `<parent>`. Este repo hoy publica `jar`.
+Si deseas heredar versiones y plugins, usa el parent `common-parent` incluido en `common-parent/pom.xml` y referencia como `<parent>` en tus micros.
 
 Librería común para microservicios Spring Boot que proporciona funcionalidades compartidas como DTOs, mappers, utilidades y configuraciones base.
 
@@ -214,14 +214,22 @@ public class YourApplication {
 }
 ```
 
-### Usar DefaultImpl
+## Componentes plug-and-play
 
-```kotlin
-@Service
-class YourServiceImpl : DefaultImpl<YourResponse, YourRequest, YourEntity, Long>() {
-    // Implementación específica si es necesaria
-}
-```
+- Controlador base: `com.common.lib.api.controller.DefaultCrudController`
+  - Endpoints: `POST /add`, `GET /all`, `PUT /update`, `DELETE /delete/{id}`
+  - Lee headers vía `RequestHeaders` y filtros vía `QueryFilters`
+- Primario genérico: `com.common.lib.infraestructure.adapters.primary.PrimaryImpl`
+  - Delegación al secundario
+- Secundario genérico: `com.common.lib.infraestructure.adapters.secundary.DefaultAdapter`
+  - CRUD sobre `DefaultRepository`, mapeo con `GenericMapper`, respuestas con `UserResponses`
+
+## Cómo crear un recurso nuevo (Java)
+1. Entidad JPA y `Repository extends DefaultRepository<Entidad, Id>`
+2. DTOs `Request/Response`
+3. Secundario: `class XSecondary extends DefaultAdapter<Response, Request, Entidad, Id>`
+4. Primario: `new PrimaryImpl<>(xSecondary)` (o define un bean Spring con ese constructor)
+5. Controlador: `class XController extends DefaultCrudController<Response, Request, Entidad, Id>`
 
 ### Configuración de Base de Datos
 
