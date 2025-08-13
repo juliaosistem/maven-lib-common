@@ -1,4 +1,23 @@
 # Maven Lib Common
+## Uso como dependencia
+
+Instala el jar localmente y úsalo desde tus micros:
+
+```bash
+mvn -DskipTests install
+```
+
+En el microservicio (`mcs-plantilla-spring`), añade:
+
+```xml
+<dependency>
+  <groupId>common-lib</groupId>
+  <artifactId>common-lib</artifactId>
+  <version>0.0.0-develop</version>
+</dependency>
+```
+
+Si desea heredar versiones y plugins vía POM padre, crea un módulo padre (packaging pom) y referencia como `<parent>`. Este repo hoy publica `jar`.
 
 Librería común para microservicios Spring Boot que proporciona funcionalidades compartidas como DTOs, mappers, utilidades y configuraciones base.
 
@@ -290,6 +309,4 @@ Para contribuir al proyecto:
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.

@@ -34,6 +34,15 @@ public interface CrudSecundaryService<RES, RQ, E, I> {
     }
 
     /**
+     * Obtiene entidades por idBusiness.
+     * @param idBusiness identificador del negocio
+     * @return Respuesta con entidades relacionadas al negocio
+     */
+    default PlantillaResponse<RES> byIdBusiness(Long idBusiness) {
+        return new PlantillaResponse<>();
+    }
+
+    /**
      * Crea una nueva entidad.
      * @param request Datos de la entidad a crear
      * @return Respuesta con la entidad creada

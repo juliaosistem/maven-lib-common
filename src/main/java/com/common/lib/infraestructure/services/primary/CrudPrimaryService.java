@@ -30,6 +30,13 @@ public interface CrudPrimaryService<RES, RQ, E, I> {
     PlantillaResponse<RES> byId(I id);
 
     /**
+     * Obtiene entidades por idBusiness.
+     * @param idBusiness identificador del negocio
+     * @return Respuesta con entidades relacionadas al negocio
+     */
+    PlantillaResponse<RES> byIdBusiness(Long idBusiness);
+
+    /**
      * Crea una nueva entidad.
      * @param request Datos de la entidad a crear
      * @return Respuesta con la entidad creada

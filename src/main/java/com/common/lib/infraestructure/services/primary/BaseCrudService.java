@@ -5,8 +5,6 @@ import com.common.lib.utils.PlantillaResponse;
 import com.common.lib.utils.ResponseType;
 import com.common.lib.utils.ResponseTypeEnum;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,11 +37,13 @@ public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryServi
             Page<E> entities = repository.findAllWithPagination();
             List<RES> responses = mapToResponseList(entities.getContent());
             
+            @SuppressWarnings("unchecked")
+            RES[] arr = (RES[]) responses.toArray((Object[]) new Object[responses.size()]);
             return PlantillaResponse.<RES>builder()
                 .rta(true)
                 .message("Entidades obtenidas exitosamente")
                 .httpStatus(ResponseType.fromCode(ResponseTypeEnum.GET.getCode()).getHttpStatus())
-                .dataList(responses.toArray((RES[]) new Object[0]))
+                .dataList(arr)
                 .build();
         } catch (Exception e) {
             return createErrorResponse("Error al obtener entidades: " + e.getMessage());
@@ -70,6 +70,35 @@ public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryServi
             }
         } catch (Exception e) {
             return createErrorResponse("Error al obtener entidad: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Obtiene entidades por idBusiness si el repositorio/entidad lo soporta.
+     */
+    @Override
+    public PlantillaResponse<RES> byIdBusiness(Long idBusiness) {
+        try {
+            // Filtro por Specification si el repositorio soporta JPA Specifications
+            List<E> entities;
+            try {
+                entities = repository.findAll((root, query, cb) -> cb.equal(root.get("idBusiness"), idBusiness));
+            } catch (Exception ex) {
+                return createBadRequestResponse("La entidad no soporta filtro por idBusiness");
+            }
+            List<RES> responses = mapToResponseList(entities);
+            @SuppressWarnings("unchecked")
+            RES[] arr = (RES[]) responses.toArray((Object[]) new Object[responses.size()]);
+            return PlantillaResponse.<RES>builder()
+                .rta(!responses.isEmpty())
+                .message(responses.isEmpty() ? "No se encontraron datos" : "Entidades obtenidas por idBusiness")
+                .httpStatus(ResponseType.fromCode(
+                    responses.isEmpty() ? ResponseTypeEnum.NOT_FOUND.getCode() : ResponseTypeEnum.GET.getCode()
+                ).getHttpStatus())
+                .dataList(arr)
+                .build();
+        } catch (Exception e) {
+            return createErrorResponse("Error al consultar por idBusiness: " + e.getMessage());
         }
     }
 

@@ -1,6 +1,5 @@
 package com.common.lib.utils;
 
-import com.common.lib.utils.PlantillaResponse;
 import com.common.lib.utils.enums.ResponseType;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
