@@ -4,14 +4,11 @@ import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
 
-/**
- * Servicio primario por defecto que delega en el servicio secundario.
- */
-public class DefaultImpl<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E, I> {
+public class DefaultImpl<RES, RQ, E> implements CrudPrimaryService<RES, RQ, E> {
 
-    private final CrudSecundaryService<RES, RQ, E, I> secondary;
+    private final CrudSecundaryService<RES, RQ, E> secondary;
 
-    public DefaultImpl(CrudSecundaryService<RES, RQ, E, I> secondary) {
+    public DefaultImpl(CrudSecundaryService<RES, RQ, E> secondary) {
         this.secondary = secondary;
     }
 
@@ -21,7 +18,7 @@ public class DefaultImpl<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E
     }
 
     @Override
-    public PlantillaResponse<RES> byId(I id) {
+    public PlantillaResponse<RES> byId(String id) {
         return secondary.byId(id);
     }
 
@@ -36,7 +33,7 @@ public class DefaultImpl<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E
     }
 
     @Override
-    public PlantillaResponse<RES> delete(I id) {
+    public PlantillaResponse<RES> delete(String id) {
         return secondary.delete(id);
     }
 

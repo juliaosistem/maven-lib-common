@@ -12,25 +12,21 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Adaptador secundario genérico en Java para operaciones CRUD.
- * Reutilizable en todos los microservicios.
- */
-public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, RQ, E, I> {
+public class DefaultAdapter<RES, RQ, E> implements CrudSecundaryService<RES, RQ, E> {
 
     protected final GenericMapper<RES, RQ, E> mapper;
     protected final AbtractError abstractError;
     protected final UserResponses<RES> userResponses;
     protected final Class<RES> resClass;
     protected final Class<E> entityClass;
-    protected final DefaultRepository<E, I> defaultRepository;
+    protected final DefaultRepository<E, Object> defaultRepository;
 
     public DefaultAdapter(GenericMapper<RES, RQ, E> mapper,
                           AbtractError abstractError,
                           UserResponses<RES> userResponses,
                           Class<RES> resClass,
                           Class<E> entityClass,
-                          DefaultRepository<E, I> defaultRepository) {
+                          DefaultRepository<E, Object> defaultRepository) {
         this.mapper = mapper;
         this.abstractError = abstractError;
         this.userResponses = userResponses;
@@ -57,9 +53,10 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
     }
 
     @Override
-    public PlantillaResponse<RES> byId(I id) {
+    public PlantillaResponse<RES> byId(String id) {
         try {
-            Optional<E> opt = defaultRepository.findByIdSafe(id);
+            Object casted = castId(id);
+            Optional<E> opt = defaultRepository.findByIdSafe(casted);
             if (opt.isPresent()) {
                 RES res = mapper.mapToRes(opt.get(), resClass);
                 return userResponses.buildResponse(ResponseTypeEnum.GET.getCode(), res);
@@ -98,9 +95,9 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
     }
 
     @Override
-    public PlantillaResponse<RES> delete(I id) {
+    public PlantillaResponse<RES> delete(String id) {
         try {
-            boolean existed = defaultRepository.deleteByIdSafe(id);
+            boolean existed = defaultRepository.deleteByIdSafe(castId(id));
             return existed
                 ? userResponses.buildResponse(ResponseTypeEnum.DELETE.getCode(), null)
                 : userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
@@ -124,6 +121,10 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
             abstractError.logError(e);
             return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
         }
+    }
+
+    protected Object castId(String id) {
+        try { return Long.parseLong(id); } catch (Exception ex) { return id; }
     }
 }
 

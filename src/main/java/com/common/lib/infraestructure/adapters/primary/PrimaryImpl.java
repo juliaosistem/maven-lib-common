@@ -4,15 +4,11 @@ import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
 
-/**
- * Clase base primario genérica que delega en el secundario.
- * Úsala directamente desde los microservicios para evitar crear primarios por recurso.
- */
-public class PrimaryImpl<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E, I> {
+public class PrimaryImpl<RES, RQ, E> implements CrudPrimaryService<RES, RQ, E> {
 
-    private final CrudSecundaryService<RES, RQ, E, I> secondary;
+    private final CrudSecundaryService<RES, RQ, E> secondary;
 
-    public PrimaryImpl(CrudSecundaryService<RES, RQ, E, I> secondary) {
+    public PrimaryImpl(CrudSecundaryService<RES, RQ, E> secondary) {
         this.secondary = secondary;
     }
 
@@ -20,7 +16,7 @@ public class PrimaryImpl<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E
     public PlantillaResponse<RES> all() { return secondary.all(); }
 
     @Override
-    public PlantillaResponse<RES> byId(I id) { return secondary.byId(id); }
+    public PlantillaResponse<RES> byId(String id) { return secondary.byId(id); }
 
     @Override
     public PlantillaResponse<RES> add(RQ request) { return secondary.add(request); }
@@ -29,7 +25,7 @@ public class PrimaryImpl<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E
     public PlantillaResponse<RES> update(RQ request) { return secondary.update(request); }
 
     @Override
-    public PlantillaResponse<RES> delete(I id) { return secondary.delete(id); }
+    public PlantillaResponse<RES> delete(String id) { return secondary.delete(id); }
 
     public PlantillaResponse<RES> byIdBusiness(Long idBusiness) { return secondary.byIdBusiness(idBusiness); }
 }

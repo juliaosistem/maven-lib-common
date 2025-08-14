@@ -15,11 +15,11 @@ import java.util.Map;
  * Controlador CRUD base plug-and-play.
  * Los métodos usan wrappers tipados para headers y filtros.
  */
-public class DefaultCrudController<RES, RQ, E, I> {
+public class DefaultCrudController<RES, RQ, E> {
 
-    protected final CrudPrimaryService<RES, RQ, E, I> primaryService;
+    protected final CrudPrimaryService<RES, RQ, E> primaryService;
 
-    public DefaultCrudController(CrudPrimaryService<RES, RQ, E, I> primaryService) {
+    public DefaultCrudController(CrudPrimaryService<RES, RQ, E> primaryService) {
         this.primaryService = primaryService;
     }
 
@@ -47,7 +47,7 @@ public class DefaultCrudController<RES, RQ, E, I> {
         // QueryFilters qf = new QueryFilters(filters);
         PlantillaResponse<RES> res;
         if (rh.getId() != null && !rh.getId().isBlank()) {
-            res = primaryService.byId(castId(rh.getId()));
+            res = primaryService.byId(rh.getId());
         } else if (rh.getIdbusiness() != null) {
             res = primaryService.byIdBusiness(rh.getIdbusiness());
         } else {
@@ -61,7 +61,7 @@ public class DefaultCrudController<RES, RQ, E, I> {
 			@PathVariable String id,
 			@RequestHeader HttpHeaders headers
 	) {
-		PlantillaResponse<RES> res = primaryService.byId(castId(id));
+        PlantillaResponse<RES> res = primaryService.byId(id);
 		return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
 	}
 
@@ -97,19 +97,11 @@ public class DefaultCrudController<RES, RQ, E, I> {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new PlantillaResponse<>(false, "No llegó parámetro id", HttpStatus.BAD_REQUEST, null, null));
 		}
-		PlantillaResponse<RES> res = primaryService.delete(castId(idValue));
+        PlantillaResponse<RES> res = primaryService.delete(idValue);
 		return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
 	}
 
-    @SuppressWarnings("unchecked")
-    protected I castId(String id) {
-        try {
-            Long num = Long.parseLong(id);
-            return (I) num;
-        } catch (Exception ex) {
-            return (I) id;
-        }
-    }
+    // ID se maneja como String para compatibilidad 1:1 con Nest
 }
 
 

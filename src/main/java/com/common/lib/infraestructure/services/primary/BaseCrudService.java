@@ -20,11 +20,11 @@ import java.util.Optional;
  * @param <I> Tipo del ID de la entidad
  * @version 3
  */
-public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryService<RES, RQ, E, I> {
+public abstract class BaseCrudService<RES, RQ, E> implements CrudPrimaryService<RES, RQ, E> {
 
-    protected final DefaultRepository<E, I> repository;
+    protected final DefaultRepository<E, Object> repository;
 
-    protected BaseCrudService(DefaultRepository<E, I> repository) {
+    protected BaseCrudService(DefaultRepository<E, Object> repository) {
         this.repository = repository;
     }
 
@@ -54,9 +54,9 @@ public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryServi
      * Obtiene una entidad por su ID.
      */
     @Override
-    public PlantillaResponse<RES> byId(I id) {
+    public PlantillaResponse<RES> byId(String id) {
         try {
-            Optional<E> entityOpt = repository.findByIdSafe(id);
+            Optional<E> entityOpt = repository.findByIdSafe(castId(id));
             if (entityOpt.isPresent()) {
                 RES response = mapToResponse(entityOpt.get());
                 return PlantillaResponse.<RES>builder()
@@ -129,12 +129,12 @@ public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryServi
     @Override
     public PlantillaResponse<RES> update(RQ request) {
         try {
-            I id = getIdFromRequest(request);
-            if (id == null) {
+            Object id = getIdFromRequest(request);
+            if (id == null || id.toString().isBlank()) {
                 return createBadRequestResponse("ID es requerido para actualizar");
             }
             
-            if (!repository.existsByIdSafe(id)) {
+            if (!repository.existsByIdSafe(castId(id.toString()))) {
                 return createNotFoundResponse("Entidad no encontrada con ID: " + id);
             }
             
@@ -157,13 +157,14 @@ public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryServi
      * Elimina una entidad por su ID.
      */
     @Override
-    public PlantillaResponse<RES> delete(I id) {
+    public PlantillaResponse<RES> delete(String id) {
         try {
-            if (!repository.existsByIdSafe(id)) {
+            Object casted = castId(id);
+            if (!repository.existsByIdSafe(casted)) {
                 return createNotFoundResponse("Entidad no encontrada con ID: " + id);
             }
             
-            repository.deleteByIdSafe(id);
+            repository.deleteByIdSafe(casted);
             
             return PlantillaResponse.<RES>builder()
                 .rta(true)
@@ -212,5 +213,13 @@ public abstract class BaseCrudService<RES, RQ, E, I> implements CrudPrimaryServi
     protected abstract RES mapToResponse(E entity);
     protected abstract List<RES> mapToResponseList(List<E> entities);
     protected abstract E mapToEntity(RQ request);
-    protected abstract I getIdFromRequest(RQ request);
+    protected abstract Object getIdFromRequest(RQ request);
+
+    protected Object castId(String id) {
+        try {
+            return Long.parseLong(id);
+        } catch (Exception ex) {
+            return id;
+        }
+    }
 }
