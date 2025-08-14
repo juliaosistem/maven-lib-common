@@ -22,10 +22,18 @@ public class RequestHeaders {
         rh.dominio = headers.getFirst("dominio");
         rh.usuario = headers.getFirst("usuario");
         String idb = headers.getFirst("idbusiness");
+        if (idb == null) {
+            idb = headers.getFirst("idBusiness");
+        }
         rh.idbusiness = idb != null ? parseLong(idb) : null;
         rh.proceso = headers.getFirst("proceso");
         rh.topic = headers.getFirst("topic");
-        rh.token = headers.getFirst("token");
+        String auth = headers.getFirst("Authorization");
+        if (auth != null && auth.toLowerCase().startsWith("bearer ")) {
+            rh.token = auth.substring(7);
+        } else {
+            rh.token = headers.getFirst("token");
+        }
         return rh;
     }
 
