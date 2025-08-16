@@ -5,103 +5,78 @@ import com.common.lib.utils.PlantillaResponse;
 import com.common.lib.utils.RequestHeaders;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
 /**
- * Controlador CRUD base plug-and-play.
- * Los métodos usan wrappers tipados para headers y filtros.
+ * Controlador CRUD base reactivo para consultar cualquier entidad
+ * @param <RES>  clase respuesta
+ * @param <RQ>  clase request
+ * @param <E>   clase entidad
+ * @author  Daniel Juliao
  */
-public class DefaultCrudController<RES, RQ, E> {
+public class DefaultCrudController<RES, RQ, E, I> {
 
-    protected final CrudPrimaryService<RES, RQ, E> primaryService;
+    protected final CrudPrimaryService<RES, RQ, E, I> primaryService;
 
-    public DefaultCrudController(CrudPrimaryService<RES, RQ, E> primaryService) {
+    public DefaultCrudController(CrudPrimaryService<RES, RQ, E, I> primaryService) {
         this.primaryService = primaryService;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PlantillaResponse<RES>> add(
+    public Mono<PlantillaResponse<RES>> add(
             @RequestBody RQ request,
             @RequestHeader HttpHeaders headers
     ) {
-        RequestHeaders rh = RequestHeaders.from(headers);
-        if (rh.getId() == null || rh.getId().isBlank()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new PlantillaResponse<>(false, "No llegó parámetro id en los headers", HttpStatus.BAD_REQUEST, null, null));
+        RequestHeaders<I> rh = RequestHeaders.from(headers);
+        if (rh.getId() == null) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
-        PlantillaResponse<RES> res = primaryService.add(request);
-        return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
+        if (rh.getTopic() == null || rh.getTopic().isBlank()) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro topic en los headers", HttpStatus.BAD_REQUEST, null, null));
+        }
+        return primaryService.add(request, rh.getId(), rh.getTopic());
     }
 
     @GetMapping("/all")
-    public ResponseEntity<PlantillaResponse<RES>> all(
+    public Mono<PlantillaResponse<RES>> all(
             @RequestHeader HttpHeaders headers,
             @RequestParam(required = false) Map<String, String> filters
     ) {
-        RequestHeaders rh = RequestHeaders.from(headers);
-        // Wrap de filtros para futura compatibilidad (reservado)
-        // QueryFilters qf = new QueryFilters(filters);
-        PlantillaResponse<RES> res;
-        if (rh.getId() != null && !rh.getId().isBlank()) {
-            res = primaryService.byId(rh.getId());
-        } else if (rh.getIdbusiness() != null) {
-            res = primaryService.byIdBusiness(rh.getIdbusiness());
-        } else {
-            res = primaryService.all();
+        RequestHeaders<I> rh = RequestHeaders.from(headers);
+        if (rh.getTopic() == null || rh.getTopic().isBlank()) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro topic en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
-        return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
+        return primaryService.all(rh.getTopic(), rh.getId(), rh.getIdbusiness(), filters);
     }
-
-	@GetMapping("/findById/{id}")
-	public ResponseEntity<PlantillaResponse<RES>> findById(
-			@PathVariable String id,
-			@RequestHeader HttpHeaders headers
-	) {
-        PlantillaResponse<RES> res = primaryService.byId(id);
-		return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
-	}
-
-	@GetMapping("/all/{idBussines}")
-	public ResponseEntity<PlantillaResponse<RES>> allByBusiness(
-			@PathVariable("idBussines") Long idBusiness,
-			@RequestHeader HttpHeaders headers
-	) {
-		PlantillaResponse<RES> res = primaryService.byIdBusiness(idBusiness);
-		return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
-	}
 
     @PutMapping("/update")
     public Mono<PlantillaResponse<RES>> update(
             @RequestBody RQ request,
             @RequestHeader HttpHeaders headers
     ) {
-        RequestHeaders rh = RequestHeaders.from(headers);
-        if (rh.getId() == null || rh.getId().isBlank() || rh.getTopic() == null || rh.getTopic().isBlank()) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id en los headers", HttpStatus.BAD_REQUEST, null, null));
+        RequestHeaders<I> rh = RequestHeaders.from(headers);
+        if (rh.getId() == null  || rh.getTopic() == null || rh.getTopic().isBlank()) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id o topic en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
-        return Mono.just(primaryService.update(request));
+        return primaryService.update(request, (I) rh.getId(), rh.getTopic());
     }
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<PlantillaResponse<RES>> delete(
-			@RequestHeader HttpHeaders headers,
-			@RequestParam(name = "id", required = false) String idParam
-	) {
-		RequestHeaders rh = RequestHeaders.from(headers);
-		String idValue = (idParam != null && !idParam.isBlank()) ? idParam : rh.getId();
-		if (idValue == null || idValue.isBlank()) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body(new PlantillaResponse<>(false, "No llegó parámetro id", HttpStatus.BAD_REQUEST, null, null));
-		}
-        PlantillaResponse<RES> res = primaryService.delete(idValue);
-		return ResponseEntity.status(res.getHttpStatus() == null ? HttpStatus.OK : res.getHttpStatus()).body(res);
-	}
-
-    // ID se maneja como String para compatibilidad 1:1 con Nest
+    @DeleteMapping("/delete")
+    public Mono<PlantillaResponse<RES>> delete(
+            @RequestHeader HttpHeaders headers
+    ) {
+        RequestHeaders<I> rh = RequestHeaders.from(headers);
+        if (rh.getId() == null ) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id", HttpStatus.BAD_REQUEST, null, null));
+        }
+        if (rh.getTopic() == null || rh.getTopic().isBlank()) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro topic en los headers", HttpStatus.BAD_REQUEST, null, null));
+        }
+        return primaryService.delete(rh.getId(), rh.getTopic());
+    }
 }
-
-
+   
+       

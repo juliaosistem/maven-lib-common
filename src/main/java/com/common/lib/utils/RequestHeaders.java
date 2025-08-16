@@ -5,12 +5,12 @@ import org.springframework.http.HttpHeaders;
 /**
  * Wrapper tipado para headers comunes de CRUD.
  */
-public class RequestHeaders {
-    private String id;
+public class RequestHeaders<I>{
+    private I id;
     private String ip;
     private String dominio;
     private String usuario;
-    private Long idbusiness;
+    private Integer idbusiness;
     private String proceso;
     private String topic;
     private String token;
@@ -25,7 +25,7 @@ public class RequestHeaders {
         if (idb == null) {
             idb = headers.getFirst("idBusiness");
         }
-        rh.idbusiness = idb != null ? parseLong(idb) : null;
+        rh.idbusiness = idb != null ? Integer.parseInt(idb) : null;
         rh.proceso = headers.getFirst("proceso");
         rh.topic = headers.getFirst("topic");
         String auth = headers.getFirst("Authorization");
@@ -37,15 +37,13 @@ public class RequestHeaders {
         return rh;
     }
 
-    private static Long parseLong(String v) {
-        try { return Long.parseLong(v); } catch (NumberFormatException e) { return null; }
-    }
+   
 
-    public String getId() { return id; }
+    public I getId() { return id; }
     public String getIp() { return ip; }
     public String getDominio() { return dominio; }
     public String getUsuario() { return usuario; }
-    public Long getIdbusiness() { return idbusiness; }
+    public Integer getIdbusiness() { return idbusiness; }
     public String getProceso() { return proceso; }
     public String getTopic() { return topic; }
     public String getToken() { return token; }

@@ -3,42 +3,44 @@ package com.common.lib.infraestructure.adapters.primary;
 import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
+import reactor.core.publisher.Mono;
+import java.util.Map;
 
-public class DefaultImpl<RES, RQ, E> implements CrudPrimaryService<RES, RQ, E> {
+public class DefaultImpl<RES, RQ, E, I> implements CrudPrimaryService<RES,RQ,E, I> {
 
-    private final CrudSecundaryService<RES, RQ, E> secondary;
+    private final CrudSecundaryService<RES, RQ, E,I> secondary;
 
-    public DefaultImpl(CrudSecundaryService<RES, RQ, E> secondary) {
+    public DefaultImpl(CrudSecundaryService<RES, RQ, E,I> secondary) {
         this.secondary = secondary;
     }
 
     @Override
-    public PlantillaResponse<RES> all() {
-        return secondary.all();
+    public Mono<PlantillaResponse<RES>> all(String topic, I id, Integer idBusiness, Map<String, String> filters) {
+        if (id != null) {
+            return Mono.fromCallable(() -> secondary.byId(id));
+        } else if (idBusiness != null) {
+            return Mono.fromCallable(() -> secondary.byIdBusiness(idBusiness));
+        } else {
+            return Mono.fromCallable(secondary::all);
+        }
+    }
+
+
+
+
+    @Override
+    public Mono<PlantillaResponse<RES>> add(RQ request, I id, String topic) {
+        return Mono.fromCallable(() -> secondary.add(request));
     }
 
     @Override
-    public PlantillaResponse<RES> byId(String id) {
-        return secondary.byId(id);
+    public Mono<PlantillaResponse<RES>> update(RQ request, I id, String topic) {
+        return Mono.fromCallable(() -> secondary.update(request));
     }
 
     @Override
-    public PlantillaResponse<RES> add(RQ request) {
-        return secondary.add(request);
-    }
-
-    @Override
-    public PlantillaResponse<RES> update(RQ request) {
-        return secondary.update(request);
-    }
-
-    @Override
-    public PlantillaResponse<RES> delete(String id) {
-        return secondary.delete(id);
-    }
-
-    public PlantillaResponse<RES> byIdBusiness(Long idBusiness) {
-        return secondary.byIdBusiness(idBusiness);
+    public Mono<PlantillaResponse<RES>> delete(I id, String topic) {
+        return Mono.fromCallable(() -> secondary.delete(id));
     }
 }
 

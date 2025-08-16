@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
-public class DefaultAdapter<RES, RQ, E> implements CrudSecundaryService<RES, RQ, E> {
+public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, RQ, E, I> {
 
     protected final GenericMapper<RES, RQ, E> mapper;
     protected final AbtractError abstractError;
@@ -53,10 +53,10 @@ public class DefaultAdapter<RES, RQ, E> implements CrudSecundaryService<RES, RQ,
     }
 
     @Override
-    public PlantillaResponse<RES> byId(String id) {
+    public PlantillaResponse<RES> byId(I id) {
         try {
-            Object casted = castId(id);
-            Optional<E> opt = defaultRepository.findByIdSafe(casted);
+
+            Optional<E> opt = defaultRepository.findByIdSafe(id);
             if (opt.isPresent()) {
                 RES res = mapper.mapToRes(opt.get(), resClass);
                 return userResponses.buildResponse(ResponseTypeEnum.GET.getCode(), res);
@@ -95,9 +95,9 @@ public class DefaultAdapter<RES, RQ, E> implements CrudSecundaryService<RES, RQ,
     }
 
     @Override
-    public PlantillaResponse<RES> delete(String id) {
+    public PlantillaResponse<RES> delete(I id) {
         try {
-            boolean existed = defaultRepository.deleteByIdSafe(castId(id));
+            boolean existed = defaultRepository.deleteByIdSafe(id);
             return existed
                 ? userResponses.buildResponse(ResponseTypeEnum.DELETE.getCode(), null)
                 : userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
@@ -108,7 +108,7 @@ public class DefaultAdapter<RES, RQ, E> implements CrudSecundaryService<RES, RQ,
     }
 
     @Override
-    public PlantillaResponse<RES> byIdBusiness(Long idBusiness) {
+    public PlantillaResponse<RES> byIdBusiness(Integer idBusiness) {
         try {
             Specification<E> spec = (root, query, cb) -> cb.equal(root.get("idBusiness"), idBusiness);
             List<E> list = defaultRepository.findAll(spec);
@@ -123,9 +123,6 @@ public class DefaultAdapter<RES, RQ, E> implements CrudSecundaryService<RES, RQ,
         }
     }
 
-    protected Object castId(String id) {
-        try { return Long.parseLong(id); } catch (Exception ex) { return id; }
-    }
 }
 
 

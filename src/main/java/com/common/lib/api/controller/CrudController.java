@@ -1,39 +1,38 @@
 package com.common.lib.api.controller;
 
 import com.common.lib.utils.PlantillaResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
 /**
- * Interfaz CRUD equivalente a la usada en Nest, para controladores.
+ * Interfaz CRUD reactiva generica.
  * @param <RES> DTO de respuesta
  * @param <RQ> DTO de request
  */
 public interface CrudController<RES, RQ> {
 
     @PostMapping("/add")
-    ResponseEntity<PlantillaResponse<RES>> add(
+    Mono<PlantillaResponse<RES>> add(
         @RequestBody RQ request,
         @RequestHeader(value = "id", required = false) String id,
         @RequestHeader("ip") String ip,
         @RequestHeader("dominio") String dominio,
         @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Long idbusiness,
+        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
         @RequestHeader("proceso") String proceso,
         @RequestHeader("topic") String topic,
         @RequestHeader(value = "token", required = false) String token
     );
 
     @GetMapping("/all")
-    ResponseEntity<PlantillaResponse<RES>> all(
+    Mono<PlantillaResponse<RES>> all(
         @RequestHeader(value = "id", required = false) String id,
         @RequestHeader("ip") String ip,
         @RequestHeader("dominio") String dominio,
         @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Long idbusiness,
+        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
         @RequestHeader("proceso") String proceso,
         @RequestHeader("topic") String topic,
         @RequestHeader(value = "token", required = false) String token,
@@ -47,23 +46,21 @@ public interface CrudController<RES, RQ> {
         @RequestHeader("ip") String ip,
         @RequestHeader("dominio") String dominio,
         @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Long idbusiness,
+        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
         @RequestHeader("proceso") String proceso,
         @RequestHeader("topic") String topic,
         @RequestHeader(value = "token", required = false) String token
     );
 
-    @DeleteMapping("/delete/{id}")
-    ResponseEntity<PlantillaResponse<RES>> delete(
-        @PathVariable String id,
+    @DeleteMapping("/delete")
+    Mono<PlantillaResponse<RES>> delete(
+        @RequestHeader(value = "id", required = false) String id,
         @RequestHeader("ip") String ip,
         @RequestHeader("dominio") String dominio,
         @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Long idbusiness,
+        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
         @RequestHeader("proceso") String proceso,
         @RequestHeader("topic") String topic,
         @RequestHeader(value = "token", required = false) String token
     );
 }
-
-
