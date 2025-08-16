@@ -51,6 +51,15 @@
         <jackson.version>2.15.3</jackson.version>
         <spring-web.version>6.2.9</spring-web.version>
         <commons-imaging-alpha.version>1.0-alpha3</commons-imaging-alpha.version>
+        
+        <!-- RAML dependencies versions -->
+        <raml-parser.version>1.0.51</raml-parser.version>
+        <raml-java-parser.version>1.0.51</raml-java-parser.version>
+        <yaml.version>2.0</yaml.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
+        
+        <!-- RAML plugin version -->
+        <raml-jaxrs-maven-plugin.version>1.3.4</raml-jaxrs-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -175,6 +184,23 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-imaging</artifactId>
                 <version>${commons-imaging-alpha.version}</version>
+            </dependency>
+            
+            <!-- RAML Parser dependencies -->
+            <dependency>
+                <groupId>org.raml</groupId>
+                <artifactId>raml-parser-2</artifactId>
+                <version>${raml-parser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.raml</groupId>
+                <artifactId>raml-java-parser</artifactId>
+                <version>${raml-java-parser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -356,6 +382,17 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
         </dependency>
+        
+        <!-- RAML dependencies -->
+        <dependency>
+            <groupId>org.raml</groupId>
+            <artifactId>raml-parser-2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
+        </dependency>
     </dependencies>
 
 
@@ -474,6 +511,57 @@
                             </configuration>
                         </execution>
                     </executions>
+                </plugin>
+
+                <!-- RAML JAX-RS Plugin -->
+                <plugin>
+                    <groupId>org.raml.plugins</groupId>
+                    <artifactId>raml-jaxrs-maven-plugin</artifactId>
+                    <version>${raml-jaxrs-maven-plugin.version}</version>
+                    <configuration>
+                        <jaxrsVersion>2.0</jaxrsVersion>
+                        <useJsr303Annotations>true</useJsr303Annotations>
+                        <jsonMapper>jackson2</jsonMapper>
+                        <generatePojo>true</generatePojo>
+                        <generateInterfaces>true</generateInterfaces>
+                        <generateClientInterfaces>false</generateClientInterfaces>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                            <phase>generate-sources</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Maven AntRun Plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <!-- Maven Resources Plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+
+                <!-- Exec Maven Plugin -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+
+                <!-- Build Helper Maven Plugin -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.4.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
