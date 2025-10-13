@@ -8,7 +8,7 @@
 <artifactId>spring-boot-starter-parent</artifactId>
 <version>3.2.0</version>
 <relativePath/>
-<!--  lookup parent from repository  -->
+
 </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>common-lib</groupId>
@@ -459,11 +459,11 @@
                     <configuration>
                         <outputDirectory>${project.build.directory}/jacoco-ut</outputDirectory>
                         <excludes>
-                            <exclude>com/juliaosystem/api/dtos/**</exclude>
-                            <exclude>com/juliaosystem/api/mappers/**</exclude>
-                            <exclude>com/juliaosystem/utils/**</exclude>
-                            <exclude>com/juliaosystem/infrastructure/services/**</exclude>
-                            <exclude>com/juliaosystem/infrastructure/entitis/**</exclude>
+                            <exclude>com/twinscode/api/dtos/**</exclude>
+                            <exclude>com/twinscode/api/mappers/**</exclude>
+                            <exclude>com/twinscode/utils/**</exclude>
+                            <exclude>com/twinscode/infrastructure/services/**</exclude>
+                            <exclude>com/twinscode/infrastructure/entitis/**</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -584,11 +584,11 @@
             <configuration>
                 <outputDirectory>${project.build.directory}/jacoco-ut</outputDirectory>
                 <excludes>
-                    <exclude>com/juliaosystem/api/dtos/**</exclude>
-                    <exclude>com/juliaosystem/api/mappers/**</exclude>
-                    <exclude>com/juliaosystem/utils/**</exclude>
-                    <exclude>com/juliaosystem/infrastructure/services/**</exclude>
-                    <exclude>com/juliaosystem/infrastructure/entitis/**</exclude>
+                    <exclude>com/twinscode/api/dtos/**</exclude>
+                    <exclude>com/twinscode/api/mappers/**</exclude>
+                    <exclude>com/twinscode/utils/**</exclude>
+                    <exclude>com/twinscode/infrastructure/services/**</exclude>
+                    <exclude>com/twinscode/infrastructure/entitis/**</exclude>
                 </excludes>
             </configuration>
         </plugin>
