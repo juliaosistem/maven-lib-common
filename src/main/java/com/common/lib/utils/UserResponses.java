@@ -33,12 +33,11 @@ public class UserResponses<RES> {
     public PlantillaResponse<RES> buildResponse(int tipoRespuesta, RES e, List<RES> listE) {
         ResponseType responseType = ResponseType.fromCode(tipoRespuesta);
         if (responseType != null) {
-            @SuppressWarnings("unchecked")
-            RES[] dataArray = listE != null ? listE.toArray((RES[]) new Object[0]) : null;
+
             return PlantillaResponse.<RES>builder()
                     .message(responseType.getMessage())
                     .data(e)
-                    .dataList(dataArray)
+                    .dataList(listE)
                     .rta(responseType.isRta())
                     .httpStatus(responseType.getHttpStatus())
                     .build();

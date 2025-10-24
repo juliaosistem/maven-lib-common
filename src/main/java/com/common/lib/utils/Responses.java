@@ -3,6 +3,8 @@ package com.common.lib.utils;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * Clase para manejar las respuestas genéricas
  * @param <E> Tipo de datos de la respuesta
@@ -25,7 +27,7 @@ public class Responses<E> {
      * @param dataList Lista de datos de la respuesta
      * @return PlantillaResponse con la respuesta construida
      */
-    public PlantillaResponse<E> buildResponse(ResponseType tipoRespuesta, E datos, E[] dataList) {
+    public PlantillaResponse<E> buildResponse(ResponseType tipoRespuesta, E datos, List<E> dataList) {
         return new PlantillaResponse<>(
             tipoRespuesta.isRta(),
             tipoRespuesta.getMessage(),
@@ -51,7 +53,7 @@ public class Responses<E> {
      * @param dataList Lista de datos de la respuesta
      * @return PlantillaResponse con la respuesta construida
      */
-    public PlantillaResponse<E> buildResponse(ResponseType tipoRespuesta, E[] dataList) {
+    public PlantillaResponse<E> buildResponse(ResponseType tipoRespuesta, List<E> dataList) {
         return buildResponse(tipoRespuesta, null, dataList);
     }
 
@@ -62,7 +64,7 @@ public class Responses<E> {
      * @param dataList Lista de datos de la respuesta
      * @return Mono con PlantillaResponse
      */
-    public Mono<PlantillaResponse<E>> buildResponseMono(ResponseType tipoRespuesta, E datos, E[] dataList) {
+    public Mono<PlantillaResponse<E>> buildResponseMono(ResponseType tipoRespuesta, E datos, List<E> dataList) {
         return Mono.just(buildResponse(tipoRespuesta, datos, dataList));
     }
 
@@ -82,7 +84,7 @@ public class Responses<E> {
      * @param dataList Lista de datos de la respuesta
      * @return Mono con PlantillaResponse
      */
-    public Mono<PlantillaResponse<E>> buildResponseMono(ResponseType tipoRespuesta, E[] dataList) {
+    public Mono<PlantillaResponse<E>> buildResponseMono(ResponseType tipoRespuesta, List<E> dataList) {
         return buildResponseMono(tipoRespuesta, null, dataList);
     }
 } 

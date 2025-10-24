@@ -2,6 +2,8 @@ package com.common.lib.utils;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+
 /**
  * Clase para manejar la tabla de datos compartida
  * 
@@ -14,12 +16,12 @@ public class PlantillaResponse<E> {
     private String message;
     private HttpStatus httpStatus;
     private E data;
-    private E[] dataList;
+    private List<E> dataList;
 
     public PlantillaResponse() {
     }
 
-    public PlantillaResponse(Boolean rta, String message, HttpStatus httpStatus, E data, E[] dataList) {
+    public PlantillaResponse(Boolean rta, String message, HttpStatus httpStatus, E data, List<E> dataList) {
         this.rta = rta;
         this.message = message;
         this.httpStatus = httpStatus;
@@ -60,11 +62,11 @@ public class PlantillaResponse<E> {
         this.data = data;
     }
 
-    public E[] getDataList() {
+    public List<E> getDataList() {
         return dataList;
     }
 
-    public void setDataList(E[] dataList) {
+    public void setDataList(List<E> dataList) {
         this.dataList = dataList;
     }
 
@@ -77,7 +79,7 @@ public class PlantillaResponse<E> {
         private String message;
         private HttpStatus httpStatus;
         private E data;
-        private E[] dataList;
+        private List<E> dataList;
 
         public Builder<E> rta(Boolean rta) {
             this.rta = rta;
@@ -99,7 +101,7 @@ public class PlantillaResponse<E> {
             return this;
         }
 
-        public Builder<E> dataList(E[] dataList) {
+        public Builder<E> dataList(List<E> dataList) {
             this.dataList = dataList;
             return this;
         }
