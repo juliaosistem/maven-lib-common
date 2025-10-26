@@ -1,6 +1,7 @@
 package com.common.lib.infraestructure.services.secundary;
 
 import com.common.lib.utils.PlantillaResponse;
+import org.springframework.stereotype.Service;
 
 /**
  * Interfaz secundaria CRUD genérica
@@ -9,7 +10,8 @@ import com.common.lib.utils.PlantillaResponse;
  * @param <E> Tipo de entidad
  * @param <I> Tipo de ID
  */
-public interface CrudSecundaryService<RES, RQ, E, I> {
+@Service
+public interface CrudSecundaryService<RES, RQ, I> {
 
     default PlantillaResponse<RES> all() { 
         return new PlantillaResponse<>(); 
@@ -31,7 +33,7 @@ public interface CrudSecundaryService<RES, RQ, E, I> {
         return new PlantillaResponse<>(); 
     }
 
-    default PlantillaResponse<RES> delete(I id) { 
+    default PlantillaResponse<RES> delete(I id) {
         return new PlantillaResponse<>(); 
     }
 }

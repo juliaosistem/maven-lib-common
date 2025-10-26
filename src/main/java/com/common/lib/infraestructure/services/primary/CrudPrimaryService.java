@@ -1,6 +1,7 @@
 package com.common.lib.infraestructure.services.primary;
 
 import com.common.lib.utils.PlantillaResponse;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -9,10 +10,10 @@ import java.util.Map;
  * Interface se usa para implementar en adaptadores de logica de negocio para cruds.
  * @param <RES> Objeto Respuesta .
  * @param <RQ> Objeto Request .
- * @param <E> Entidad de la base de datos.
  * @param <I> Tipo de id de la entidad puede ser String o Integer.
  */
-public interface CrudPrimaryService<RES, RQ, E, I> {
+@Component
+public interface CrudPrimaryService<RES, RQ,  I> {
 
     /**
      * Obtiene todas las entidades, con filtros opcionales.

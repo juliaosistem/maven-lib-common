@@ -1,5 +1,8 @@
 package com.common.lib.api.controller;
 
+import com.common.lib.api.mappers.GenericMapper;
+
+import com.common.lib.api.mappers.MapperConRequest;
 import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.utils.PlantillaResponse;
 import com.common.lib.utils.RequestHeaders;
@@ -19,10 +22,28 @@ import java.util.Map;
  */
 public class DefaultCrudController<RES, RQ, E, I> {
 
-    protected final CrudPrimaryService<RES, RQ, E, I> primaryService;
+    protected final CrudPrimaryService<RES, RQ,  I> primaryService;
+    /**
+     * Mapper genérico opcional para usar en controladores concretos que requieran transformar
+     * entre request/entidad/respuesta manualmente. No es obligatorio para el flujo base.
+     */
+    protected final MapperConRequest<E,RES,RQ> mapper;
 
-    public DefaultCrudController(CrudPrimaryService<RES, RQ, E, I> primaryService) {
+    public DefaultCrudController(CrudPrimaryService<RES, RQ, I> primaryService) {
         this.primaryService = primaryService;
+        this.mapper = null;
+    }
+
+    /**
+     * Constructor alterno que permite inyectar un {@link GenericMapper} cuando el controlador
+     * concreto lo necesita para lógica adicional de mapeo (similar a la capacidad del
+     * DefaultCrudController en TypeScript de configurar colaboradores opcionales).
+     * Se mantiene el constructor original para compatibilidad.
+     */
+    public DefaultCrudController(CrudPrimaryService<RES, RQ, I> primaryService,
+                                 MapperConRequest<E,RES,RQ> mapper) {
+        this.primaryService = primaryService;
+        this.mapper = mapper;
     }
 
     @PostMapping("/add")
@@ -31,12 +52,6 @@ public class DefaultCrudController<RES, RQ, E, I> {
             @RequestHeader HttpHeaders headers
     ) {
         RequestHeaders<I> rh = RequestHeaders.from(headers);
-        if (rh.getId() == null) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id en los headers", HttpStatus.BAD_REQUEST, null, null));
-        }
-        if (rh.getTopic() == null || rh.getTopic().isBlank()) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro topic en los headers", HttpStatus.BAD_REQUEST, null, null));
-        }
         return primaryService.add(request, rh.getId(), rh.getTopic());
     }
 
@@ -46,8 +61,8 @@ public class DefaultCrudController<RES, RQ, E, I> {
             @RequestParam(required = false) Map<String, String> filters
     ) {
         RequestHeaders<I> rh = RequestHeaders.from(headers);
-        if (rh.getTopic() == null || rh.getTopic().isBlank()) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro topic en los headers", HttpStatus.BAD_REQUEST, null, null));
+        if (rh.getIdbusiness() == null) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines", HttpStatus.BAD_REQUEST, null, null));
         }
         return primaryService.all(rh.getTopic(), rh.getId(), rh.getIdbusiness(), filters);
     }
@@ -72,9 +87,7 @@ public class DefaultCrudController<RES, RQ, E, I> {
         if (rh.getId() == null ) {
             return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id", HttpStatus.BAD_REQUEST, null, null));
         }
-        if (rh.getTopic() == null || rh.getTopic().isBlank()) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro topic en los headers", HttpStatus.BAD_REQUEST, null, null));
-        }
+
         return primaryService.delete(rh.getId(), rh.getTopic());
     }
 }

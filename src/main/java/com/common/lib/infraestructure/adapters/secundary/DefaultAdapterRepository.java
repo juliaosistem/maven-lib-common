@@ -1,6 +1,7 @@
 package com.common.lib.infraestructure.adapters.secundary;
 
 import com.common.lib.api.mappers.GenericMapper;
+import com.common.lib.api.mappers.MapperConRequest;
 import com.common.lib.infraestructure.repository.DefaultRepository;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
@@ -12,7 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
-public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, RQ, E, I> {
+public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundaryService<RES, RQ, I> {
 
     protected final GenericMapper<RES, RQ, E> mapper;
     protected final AbtractError abstractError;
@@ -20,8 +21,17 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
     protected final Class<RES> resClass;
     protected final Class<E> entityClass;
     protected final DefaultRepository<E, Object> defaultRepository;
+    protected final MapperConRequest<E, RES, RQ> mapperConRequest;
 
-    public DefaultAdapter(GenericMapper<RES, RQ, E> mapper,
+    /** Constructor principal sin MapperConRequest especializado usa el mapper generico
+     * @param mapper Mapper genérico
+     * @param abstractError Manejo de errores
+     * @param userResponses Respuestas de usuario
+     * @param resClass Clase de respuesta
+   * @param entityClass Clase de entidad
+   * @param defaultRepository Repositorio por defecto
+  */
+    public DefaultAdapterRepository(GenericMapper<RES, RQ, E> mapper,
                           AbtractError abstractError,
                           UserResponses<RES> userResponses,
                           Class<RES> resClass,
@@ -33,13 +43,43 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
         this.resClass = resClass;
         this.entityClass = entityClass;
         this.defaultRepository = defaultRepository;
+        this.mapperConRequest = null; // por defecto no hay mapper especializado
     }
+
+
+    /**
+     * @param mapperConRequest Mapper especializado para transformar entre entidad y request/response
+     * @param abstractError Manejo de errores
+     * @param userResponses Respuestas de usuario
+     * @param resClass Clase de respuesta
+     * @param entityClass Clase de entidad
+     * @param defaultRepository Repositorio por defecto
+     * Constructor alterno que permite inyectar un MapperConRequest especializado
+     */
+    public DefaultAdapterRepository(GenericMapper<RES, RQ, E> mapper,
+                          AbtractError abstractError,
+                          UserResponses<RES> userResponses,
+                          Class<RES> resClass,
+                          Class<E> entityClass,
+                          DefaultRepository<E, Object> defaultRepository,
+                          MapperConRequest<E, RES, RQ> mapperConRequest) {
+        this.mapper = mapper;
+        this.abstractError = abstractError;
+        this.userResponses = userResponses;
+        this.resClass = resClass;
+        this.entityClass = entityClass;
+        this.defaultRepository = defaultRepository;
+        this.mapperConRequest = mapperConRequest;
+    }
+
 
     @Override
     public PlantillaResponse<RES> all() {
         try {
             List<E> content = defaultRepository.findAllWithPagination().getContent();
-            List<RES> list = mapper.mapListToRes(content, resClass);
+            List<RES> list = (mapperConRequest != null)
+            ? mapperConRequest.mapListToRes(content)
+            : mapper.mapListToRes(content, resClass);
             if (list == null || list.isEmpty()) {
                 abstractError.logInfo("DefaultAdapter.all(): NOT_FOUND");
                 return userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
@@ -58,7 +98,9 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
 
             Optional<E> opt = defaultRepository.findByIdSafe(id);
             if (opt.isPresent()) {
-                RES res = mapper.mapToRes(opt.get(), resClass);
+        RES res = (mapperConRequest != null)
+            ? mapperConRequest.mapToRes(opt.get())
+            : mapper.mapToRes(opt.get(), resClass);
                 return userResponses.buildResponse(ResponseTypeEnum.GET.getCode(), res);
             }
             return userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
@@ -71,9 +113,13 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
     @Override
     public PlantillaResponse<RES> add(RQ request) {
         try {
-            E entity = mapper.mapToEntity(request, entityClass);
+        E entity = (mapperConRequest != null)
+            ? mapperConRequest.deRequestAEntidad(request)
+            : mapper.mapToEntity(request, entityClass);
             E saved = defaultRepository.save(entity);
-            RES res = mapper.mapToRes(saved, resClass);
+        RES res = (mapperConRequest != null)
+            ? mapperConRequest.mapToRes(saved)
+            : mapper.mapToRes(saved, resClass);
             return userResponses.buildResponse(ResponseTypeEnum.CREADO.getCode(), res);
         } catch (Exception e) {
             abstractError.logError(e);
@@ -84,9 +130,13 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
     @Override
     public PlantillaResponse<RES> update(RQ request) {
         try {
-            E entity = mapper.mapToEntity(request, entityClass);
+        E entity = (mapperConRequest != null)
+            ? mapperConRequest.deRequestAEntidad(request)
+            : mapper.mapToEntity(request, entityClass);
             E saved = defaultRepository.save(entity);
-            RES res = mapper.mapToRes(saved, resClass);
+        RES res = (mapperConRequest != null)
+            ? mapperConRequest.mapToRes(saved)
+            : mapper.mapToRes(saved, resClass);
             return userResponses.buildResponse(ResponseTypeEnum.ACTUALIZADO.getCode(), res);
         } catch (Exception e) {
             abstractError.logError(e);
@@ -112,7 +162,9 @@ public class DefaultAdapter<RES, RQ, E, I> implements CrudSecundaryService<RES, 
         try {
             Specification<E> spec = (root, query, cb) -> cb.equal(root.get("idBusiness"), idBusiness);
             List<E> list = defaultRepository.findAll(spec);
-            List<RES> mapped = mapper.mapListToRes(list, resClass);
+        List<RES> mapped = (mapperConRequest != null)
+            ? mapperConRequest.mapListToRes(list)
+            : mapper.mapListToRes(list, resClass);
             if (mapped == null || mapped.isEmpty()) {
                 return userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
             }

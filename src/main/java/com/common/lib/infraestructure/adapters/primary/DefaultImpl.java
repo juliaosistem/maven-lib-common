@@ -3,16 +3,17 @@ package com.common.lib.infraestructure.adapters.primary;
 import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import java.util.Map;
 
-public class DefaultImpl<RES, RQ, E, I> implements CrudPrimaryService<RES,RQ,E, I> {
 
-    private final CrudSecundaryService<RES, RQ, E,I> secondary;
+@RequiredArgsConstructor
+public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
 
-    public DefaultImpl(CrudSecundaryService<RES, RQ, E,I> secondary) {
-        this.secondary = secondary;
-    }
+    private final CrudSecundaryService<RES, RQ, I> secondary;
+
 
     @Override
     public Mono<PlantillaResponse<RES>> all(String topic, I id, Integer idBusiness, Map<String, String> filters) {
@@ -24,8 +25,6 @@ public class DefaultImpl<RES, RQ, E, I> implements CrudPrimaryService<RES,RQ,E, 
             return Mono.fromCallable(secondary::all);
         }
     }
-
-
 
 
     @Override
