@@ -44,7 +44,7 @@ public class DatesUser {
 
     @ManyToOne
     @JoinColumn(name = "id_estado")
-    private Estates state;
+    private Estados state;
 
 
 //    @Override
