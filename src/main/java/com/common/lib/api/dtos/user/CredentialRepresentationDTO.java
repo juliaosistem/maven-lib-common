@@ -18,5 +18,6 @@ public class CredentialRepresentationDTO {
     private boolean temporary;
 
     @JsonProperty("type")
+    @Builder.Default
     private String type = "password";
 }

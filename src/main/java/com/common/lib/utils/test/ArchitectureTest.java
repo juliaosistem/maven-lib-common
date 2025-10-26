@@ -10,10 +10,9 @@ import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 
-
 public class ArchitectureTest {
 
-    private static   JavaClasses allClases(String packageName){
+    private static JavaClasses allClases(String packageName) {
         return new ClassFileImporter()
                 .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
                 .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_ARCHIVES)
@@ -21,8 +20,7 @@ public class ArchitectureTest {
     }
 
     public static void checkHexagonalArchitecture(String packageName) {
-        
-        JavaClasses   allClasses = allClases(packageName);
+        JavaClasses allClasses = allClases(packageName);
 
         ArchRule controllersShouldBeInApiPackage =
                 ArchRuleDefinition.classes().that().haveSimpleNameEndingWith("Controller")
@@ -41,7 +39,6 @@ public class ArchitectureTest {
                 ArchRuleDefinition.classes().that().haveSimpleNameEndingWith("Adapter")
                         .should().resideInAPackage("..infrastructure.adapters.secondary");
 
-
         ArchRule servicesShouldBeInServicesPackage =
                 ArchRuleDefinition.classes().that().haveSimpleNameEndingWith("Service")
                         .should().resideInAPackage("..infrastructure.services.primary");
@@ -49,7 +46,6 @@ public class ArchitectureTest {
         ArchRule servicesInterShouldBeInServicesPackage =
                 ArchRuleDefinition.classes().that().haveSimpleNameEndingWith("Inter")
                         .should().resideInAPackage("..infrastructure.services.secondary");
-
 
         ArchRule repositoriesShouldBeInRepositoryPackage =
                 ArchRuleDefinition.classes().that().haveSimpleNameEndingWith("Repository")
@@ -64,7 +60,7 @@ public class ArchitectureTest {
     }
 
     public static void checkMethodSizeAndParameters(String packageName) {
-        JavaClasses   allClasses = allClases(packageName);
+        JavaClasses allClasses = allClases(packageName);
 
         ArchCondition<JavaMethod> condition = new ArchCondition<JavaMethod>("no exceder el límite de líneas") {
             @Override
@@ -74,13 +70,14 @@ public class ArchitectureTest {
 
                 int linesOfCode = MethodSizeAndParametersCondition.verificarTamanoMetodos(method.getOwner().reflect());
                 if (linesOfCode > maxLines) {
-                    events.add(SimpleConditionEvent.violated(method, "El método excede las 12 líneas de código" + "archivo :" + method.getSourceCodeLocation().getSourceClass() + "linea:" + method.getSourceCodeLocation().getLineNumber()));
+                    events.add(SimpleConditionEvent.violated(method, 
+                        "El método excede las 12 líneas de código" + "archivo :" + method.getSourceCodeLocation().getSourceClass() + "linea:" + method.getSourceCodeLocation().getLineNumber()));
                 }
                 if (!MethodSizeAndParametersCondition.haveAtMost(maxParameters).test(method)) {
-                    events.add(SimpleConditionEvent.violated(method, "El método excede los 3 parámetros" +"archivo :" + method.getSourceCodeLocation().getSourceClass() + "linea:" + method.getSourceCodeLocation().getLineNumber()));
+                    events.add(SimpleConditionEvent.violated(method, 
+                        "El método excede los 3 parámetros" + "archivo :" + method.getSourceCodeLocation().getSourceClass() + "linea:" + method.getSourceCodeLocation().getLineNumber()));
                 }
             }
-
         };
 
         ArchRule rule = ArchRuleDefinition.methods()
@@ -88,7 +85,5 @@ public class ArchitectureTest {
                 .should(condition);
 
         rule.check(allClasses);
-
     }
-
 }

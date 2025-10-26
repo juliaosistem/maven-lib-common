@@ -1,5 +1,6 @@
 package com.common.lib.api.mappers;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -13,5 +14,5 @@ import java.util.List;
 public interface PlantillaMapperGetDTO <T,D>{
 
     List<D> getListDTO(List<T> t);
-    D getDTO(T t);
+    D getDTO(T t) throws IOException;
 }

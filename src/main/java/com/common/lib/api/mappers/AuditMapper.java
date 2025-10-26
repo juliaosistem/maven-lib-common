@@ -5,17 +5,17 @@ import com.common.lib.api.response.AuditResponse;
 import com.common.lib.infraestructure.entitis.Audit;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
-@Mapper(componentModel ="spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+@Mapper(
+    componentModel = "spring",
+    nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface AuditMapper {
-
     AuditResponse map(Audit source);
-
-    Audit map( AuditRequest source);
-
+    Audit map(AuditRequest source);
     List<AuditResponse> mapList(List<Audit> sources);
-
-
 }

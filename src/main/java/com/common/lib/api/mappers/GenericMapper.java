@@ -1,56 +1,41 @@
 package com.common.lib.api.mappers;
 
-import com.netflix.discovery.provider.Serializer;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
-@Serializer
 public class GenericMapper<RES, RQ, E> {
 
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
 
-    public GenericMapper() {
-        this.modelMapper = new ModelMapper();
-    }
+    public GenericMapper() { }
 
     /**
-     * Mapea de un objeto de tipo `E` a un objeto de tipo `RES`.
-     *
-     * @param source El objeto fuente de tipo `E`.
-     * @param resClass La clase de tipo `RES`.
-     * @return Un objeto mapeado de tipo `RES`.
+     * Equivalente a plainToClass: mapea entidad a DTO de respuesta.
      */
     public RES mapToRes(E source, Class<RES> resClass) {
+        if (source == null) return null;
         return modelMapper.map(source, resClass);
     }
 
     /**
-     * Mapea de un objeto de tipo `RQ` a un objeto de tipo `E`.
-     *
-     * @param source El objeto fuente de tipo `RQ`.
-     * @param entityClass La clase de tipo `E`.
-     * @return Un objeto mapeado de tipo `E`.
+     * Equivalente a plainToClass: mapea request a entidad.
      */
     public E mapToEntity(RQ source, Class<E> entityClass) {
+        if (source == null) return null;
         return modelMapper.map(source, entityClass);
     }
 
     /**
-     * Mapea una lista de objetos de tipo `E` a una lista de objetos de tipo `RES`.
-     *
-     * @param sourceList La lista de objetos fuente de tipo `E`.
-     * @param resClass La clase de tipo `RES`.
-     * @return Una lista de objetos mapeados de tipo `RES`.
+     * Mapea listas de entidades a listas de DTOs de respuesta.
      */
     public List<RES> mapListToRes(List<E> sourceList, Class<RES> resClass) {
-        List<RES> list = new ArrayList<>();
-        for (E source : sourceList) {
-            RES res = mapToRes(source, resClass);
-            list.add(res);
-        }
-        return list;
+        if (sourceList == null) return List.of();
+        return sourceList.stream()
+                .map(e -> mapToRes(e, resClass))
+                .collect(Collectors.toList());
     }
 }

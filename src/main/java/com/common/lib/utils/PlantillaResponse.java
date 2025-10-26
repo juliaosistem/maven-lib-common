@@ -1,21 +1,27 @@
-package com.common.lib.api.response;
+package com.common.lib.utils;
 
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-public class PlantillaResponse<RES> {
-    private boolean rta;
+/**
+ * Clase para manejar la tabla de datos compartida
+ * 
+ * @param <E> Clase de respuesta que contiene la data
+ * @version 1
+ * @author Daniel juliao
+ */
+public class PlantillaResponse<E> {
+    private Boolean rta;
     private String message;
     private HttpStatus httpStatus;
-    private RES data;
-    private List<RES> dataList;
+    private E data;
+    private List<E> dataList;
 
     public PlantillaResponse() {
-        this(false, "", HttpStatus.OK, null, null);
     }
 
-    public PlantillaResponse(boolean rta, String message, HttpStatus httpStatus, RES data, List<RES> dataList) {
+    public PlantillaResponse(Boolean rta, String message, HttpStatus httpStatus, E data, List<E> dataList) {
         this.rta = rta;
         this.message = message;
         this.httpStatus = httpStatus;
@@ -23,11 +29,12 @@ public class PlantillaResponse<RES> {
         this.dataList = dataList;
     }
 
-    public boolean isRta() {
+    // Getters y Setters
+    public Boolean getRta() {
         return rta;
     }
 
-    public void setRta(boolean rta) {
+    public void setRta(Boolean rta) {
         this.rta = rta;
     }
 
@@ -47,62 +54,60 @@ public class PlantillaResponse<RES> {
         this.httpStatus = httpStatus;
     }
 
-    public RES getData() {
+    public E getData() {
         return data;
     }
 
-    public void setData(RES data) {
+    public void setData(E data) {
         this.data = data;
     }
 
-    public List<RES> getDataList() {
+    public List<E> getDataList() {
         return dataList;
     }
 
-    public void setDataList(List<RES> dataList) {
+    public void setDataList(List<E> dataList) {
         this.dataList = dataList;
     }
 
-    public static <RES> Builder<RES> builder() {
+    public static <E> Builder<E> builder() {
         return new Builder<>();
     }
 
-    public static class Builder<RES> {
-        private boolean rta = false;
-        private String message = "";
-        private HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        private RES data;
-        private List<RES> dataList;
+    public static class Builder<E> {
+        private Boolean rta;
+        private String message;
+        private HttpStatus httpStatus;
+        private E data;
+        private List<E> dataList;
 
-        public Builder<RES> rta(boolean rta) {
+        public Builder<E> rta(Boolean rta) {
             this.rta = rta;
             return this;
         }
 
-        public Builder<RES> message(String message) {
+        public Builder<E> message(String message) {
             this.message = message;
             return this;
         }
 
-        public Builder<RES> httpStatus(HttpStatus httpStatus) {
+        public Builder<E> httpStatus(HttpStatus httpStatus) {
             this.httpStatus = httpStatus;
             return this;
         }
 
-        public Builder<RES> data(RES data) {
+        public Builder<E> data(E data) {
             this.data = data;
             return this;
         }
 
-        public Builder<RES> dataList(List<RES> dataList) {
+        public Builder<E> dataList(List<E> dataList) {
             this.dataList = dataList;
             return this;
         }
 
-        public PlantillaResponse<RES> build() {
+        public PlantillaResponse<E> build() {
             return new PlantillaResponse<>(rta, message, httpStatus, data, dataList);
         }
     }
-}
-
-
+} 

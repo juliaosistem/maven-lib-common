@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -16,13 +13,11 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "estados")
-public class Estates {
+public class Estados {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id_estado")
-    private UUID idEstate;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @NotEmpty
     @Column(name = "nombre_estado")
@@ -31,5 +26,8 @@ public class Estates {
     @Column(name = "descripcion")
     private String description;
 
+    public Estados(Integer id) {
+        this.id = id;
+    }
 
 }

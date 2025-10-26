@@ -1,8 +1,5 @@
 package com.common.lib.utils.enums;
 
-
-
-
 public enum MensajesRespuesta {
     CREADO("Creado(a) correctamente"),
     NO_ENCONTRADO("No se encontraron datos"),

@@ -17,6 +17,6 @@ public class ImageDTO {
         String urlStr = "file://" + fileName;
         URL ur = new URL(urlStr);
         UrlResource resource = new UrlResource(ur);
-        this.url = resource.getURL().toString();
+        this.url = resource.getURI().toString();
     }
 }
