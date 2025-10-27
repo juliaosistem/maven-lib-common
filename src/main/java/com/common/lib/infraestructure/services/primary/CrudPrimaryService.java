@@ -1,6 +1,8 @@
 package com.common.lib.infraestructure.services.primary;
 
 import com.common.lib.utils.PlantillaResponse;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -17,20 +19,19 @@ public interface CrudPrimaryService<RES, RQ,  I> {
 
     /**
      * Obtiene todas las entidades, con filtros opcionales.
-     * @param topic Identificador topico kafka y redis
-     * @param id Identificador de la entidad (opcional)
-     * @param idBusiness Identificador del negocio (opcional)
+     * @param headers Identificador del negocio (opcional)
+     *
      * @param filters Mapa de filtros personalizados (opcional)
      */
-    Mono<PlantillaResponse<RES>> all(String topic, I id, Integer idBusiness, Map<String, String> filters);
+    Mono<PlantillaResponse<RES>> all(HttpHeaders headers, Map<String, String> filters);
 
     /**
      * Agrega una nueva entidad.
      * @param request Objeto de solicitud de creación
-     * @param id Identificador de la entidad
-     * @param topic Identificador topico kafka y redis
+     * @param headers Identificador del negocio
+     *
      */
-    Mono<PlantillaResponse<RES>> add(RQ request, I id, String topic);
+    Mono<PlantillaResponse<RES>> add(RQ request, HttpHeaders headers);
 
     /**
      * Actualiza una entidad existente.

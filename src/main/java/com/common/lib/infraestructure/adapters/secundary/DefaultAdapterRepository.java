@@ -2,11 +2,12 @@ package com.common.lib.infraestructure.adapters.secundary;
 
 import com.common.lib.api.mappers.GenericMapper;
 import com.common.lib.api.mappers.MapperConRequest;
+import com.common.lib.infraestructure.entitis.BaseEntities;
 import com.common.lib.infraestructure.repository.DefaultRepository;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
-import com.common.lib.utils.ResponseTypeEnum;
 import com.common.lib.utils.UserResponses;
+import com.common.lib.utils.enums.ResponseType;
 import com.common.lib.utils.errors.AbtractError;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -75,6 +76,8 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
 
     @Override
     public PlantillaResponse<RES> all() {
+        long startTime = System.currentTimeMillis();
+        this.abstractError.logInfo("DefaultAdapter.all()");
         try {
             List<E> content = defaultRepository.findAllWithPagination().getContent();
             List<RES> list = (mapperConRequest != null)
@@ -82,18 +85,25 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
             : mapper.mapListToRes(content, resClass);
             if (list == null || list.isEmpty()) {
                 abstractError.logInfo("DefaultAdapter.all(): NOT_FOUND");
-                return userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
+                return userResponses.buildResponse(ResponseType.NO_ENCONTRADO.getCode(), null);
             }
-            abstractError.logInfo("DefaultAdapter.all(): GET");
-            return userResponses.buildResponse(ResponseTypeEnum.GET.getCode(), null, list);
+            abstractError.logInfo("DefaultAdapter.all(): GET  list = " + list);
+            return userResponses.buildResponse(ResponseType.GET.getCode(), null, list);
         } catch (Exception e) {
             abstractError.logError(e);
-            return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
+            return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
         }
     }
 
     @Override
     public PlantillaResponse<RES> byId(I id) {
+        long startTime = System.currentTimeMillis();
+ this.abstractError.logInfo("DefaultAdapter.byId() id =" + id);
         try {
 
             Optional<E> opt = defaultRepository.findByIdSafe(id);
@@ -101,34 +111,82 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
         RES res = (mapperConRequest != null)
             ? mapperConRequest.mapToRes(opt.get())
             : mapper.mapToRes(opt.get(), resClass);
-                return userResponses.buildResponse(ResponseTypeEnum.GET.getCode(), res);
+                return userResponses.buildResponse(ResponseType.GET.getCode(), res);
             }
-            return userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
+            return userResponses.buildResponse(ResponseType.NO_ENCONTRADO.getCode(), null);
         } catch (Exception e) {
             abstractError.logError(e);
-            return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
+            return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
         }
     }
 
+    /**
+     * @param request Request a transformar a entidad
+     * @param idBussines id de bussines a asignar a la entidad
+
+     * Se encarga de transformar el request a entidad ,asignarle el id de bussines si es necesario , guardarlo en base de datos
+     *  condiciones verifica si viene un mapper en el  constructor si llega lo usa para transformar el request a entidad si no usa el defualt
+     */
+
     @Override
-    public PlantillaResponse<RES> add(RQ request) {
+    public PlantillaResponse<RES> add(RQ request ,Integer idBussines) {
+        long startTime = System.currentTimeMillis();
+ this.abstractError.logInfo("DefaultAdapter.add() request =" + request);
         try {
         E entity = (mapperConRequest != null)
             ? mapperConRequest.deRequestAEntidad(request)
             : mapper.mapToEntity(request, entityClass);
+           llenarEntidadConIdbussines(idBussines, entity);
             E saved = defaultRepository.save(entity);
         RES res = (mapperConRequest != null)
             ? mapperConRequest.mapToRes(saved)
             : mapper.mapToRes(saved, resClass);
-            return userResponses.buildResponse(ResponseTypeEnum.CREADO.getCode(), res);
+            return userResponses.buildResponse(ResponseType.CREATED.getCode(), res);
         } catch (Exception e) {
             abstractError.logError(e);
-            return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
+            return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+        }
+    }
+
+    /**
+     * @param entity entidad a llenar
+     * @param idBussines id de bussines a asignar a la entidad
+     * le agrega el id de bussines a la entidad si es necesario
+     */
+    private void llenarEntidadConIdbussines(Integer idBussines, E entity){
+        if (idBussines != null) {
+            try {
+                if (entity instanceof BaseEntities) {
+                    ((BaseEntities) entity).setIdBusiness(idBussines);
+                } else {
+                    try {
+                        var field = entity.getClass().getDeclaredField("idBusiness");
+                        field.setAccessible(true);
+                        field.set(entity, idBussines);
+                    } catch (NoSuchFieldException | IllegalAccessException ex) {
+                        abstractError.logInfo("No se estableció idBusiness via reflection: " + ex.getMessage());
+                    }
+                }
+            } catch (Exception ex) {
+                abstractError.logInfo("Error asignando idBusiness a la entidad: " + ex.getMessage());
+            }
         }
     }
 
     @Override
     public PlantillaResponse<RES> update(RQ request) {
+        long startTime = System.currentTimeMillis();
+        this.abstractError.logInfo("DefaultAdapter.update() request =" + request);
         try {
         E entity = (mapperConRequest != null)
             ? mapperConRequest.deRequestAEntidad(request)
@@ -137,28 +195,43 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
         RES res = (mapperConRequest != null)
             ? mapperConRequest.mapToRes(saved)
             : mapper.mapToRes(saved, resClass);
-            return userResponses.buildResponse(ResponseTypeEnum.ACTUALIZADO.getCode(), res);
+            return userResponses.buildResponse(ResponseType.UPDATED.getCode(), res);
         } catch (Exception e) {
             abstractError.logError(e);
-            return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
+            return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
+        finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+        }
+
     }
 
     @Override
     public PlantillaResponse<RES> delete(I id) {
+        long startTime = System.currentTimeMillis();
+        this.abstractError.logInfo("DefaultAdapter.delete() id =" + id);
         try {
             boolean existed = defaultRepository.deleteByIdSafe(id);
             return existed
-                ? userResponses.buildResponse(ResponseTypeEnum.DELETE.getCode(), null)
-                : userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
+                ? userResponses.buildResponse(ResponseType.DELETED.getCode(), null)
+                : userResponses.buildResponse(ResponseType.NO_ENCONTRADO.getCode(), null);
         } catch (Exception e) {
             abstractError.logError(e);
-            return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
+            return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
         }
     }
 
     @Override
     public PlantillaResponse<RES> byIdBusiness(Integer idBusiness) {
+        long startTime = System.currentTimeMillis();
+        this.abstractError.logInfo("DefaultAdapter.byIdBusiness() idBusiness =" + idBusiness);
         try {
             Specification<E> spec = (root, query, cb) -> cb.equal(root.get("idBusiness"), idBusiness);
             List<E> list = defaultRepository.findAll(spec);
@@ -166,12 +239,17 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
             ? mapperConRequest.mapListToRes(list)
             : mapper.mapListToRes(list, resClass);
             if (mapped == null || mapped.isEmpty()) {
-                return userResponses.buildResponse(ResponseTypeEnum.NOT_FOUND.getCode(), null);
+                return userResponses.buildResponse(ResponseType.NO_ENCONTRADO.getCode(), null);
             }
-            return userResponses.buildResponse(ResponseTypeEnum.GET.getCode(), null, mapped);
+            return userResponses.buildResponse(ResponseType.GET.getCode(), null, mapped);
         } catch (Exception e) {
             abstractError.logError(e);
-            return userResponses.buildResponse(ResponseTypeEnum.FALLO.getCode(), null);
+            return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
+        }
+        finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
         }
     }
 

@@ -19,7 +19,9 @@ public enum ResponseType {
     NO_ENCONTRADO(11, MensajesRespuesta.NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK),
     FALLO_CREATE_PHONE(12, MensajesRespuesta.FALLO_CREATE_PHONE.getMensaje(), false, HttpStatus.BAD_REQUEST),
     FALLO_CREATE_DATOS_USER(13,MensajesRespuesta.FALLO_CREATE_DATOS_USER.getMensaje() ,false ,HttpStatus.BAD_REQUEST ),
-    DELETED(14,MensajesRespuesta.DELETED.getMensaje(),true, HttpStatus.OK);
+    DELETED(14,MensajesRespuesta.DELETED.getMensaje(),true, HttpStatus.OK),
+    ID_BUSSINES_NO_ENCONTRADO(15, MensajesRespuesta.ID_BUSSINES_NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK),
+    FEING_BUSSINES_FALLO(16,MensajesRespuesta.FEING_BUSSINES_FALLO.getMensaje() ,false ,HttpStatus.SERVICE_UNAVAILABLE );
 
 
 

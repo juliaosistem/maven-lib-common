@@ -10,7 +10,7 @@ public class RequestHeaders<I>{
     private String ip;
     private String dominio;
     private String usuario;
-    private Integer idbusiness;
+    private Integer idBussines;
     private String proceso;
     private String topic;
     private String token;
@@ -21,11 +21,11 @@ public class RequestHeaders<I>{
         rh.ip = headers.getFirst("ip");
         rh.dominio = headers.getFirst("dominio");
         rh.usuario = headers.getFirst("usuario");
-        String idb = headers.getFirst("idbusiness");
+        String idb = headers.getFirst("idBussines");
         if (idb == null) {
-            idb = headers.getFirst("idBusiness");
+            idb = headers.getFirst("idBussines");
         }
-        rh.idbusiness = idb != null ? Integer.parseInt(idb) : null;
+        rh.idBussines = idb != null ? Integer.parseInt(idb) : null;
         rh.proceso = headers.getFirst("proceso");
         rh.topic = headers.getFirst("topic");
         String auth = headers.getFirst("Authorization");
@@ -43,7 +43,7 @@ public class RequestHeaders<I>{
     public String getIp() { return ip; }
     public String getDominio() { return dominio; }
     public String getUsuario() { return usuario; }
-    public Integer getIdbusiness() { return idbusiness; }
+    public Integer getidBussines() { return idBussines; }
     public String getProceso() { return proceso; }
     public String getTopic() { return topic; }
     public String getToken() { return token; }

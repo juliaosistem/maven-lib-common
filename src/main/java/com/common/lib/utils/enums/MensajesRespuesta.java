@@ -13,7 +13,9 @@ public enum MensajesRespuesta {
     USER_LOGEADO("Datos Correctos"),
     FALLO_CREATE_PHONE("Fallo al crear telefono"),
     FALLO_CREATE_DATOS_USER("Fallo al crear datos de usuario"),
-    DELETED("Eliminado(a) correctamente");
+    DELETED("Eliminado(a) correctamente"),
+    ID_BUSSINES_NO_ENCONTRADO("El negocio con el id especificado no existe"),
+    FEING_BUSSINES_FALLO("El endpoint business no está disponible en este momento");
 
     private final String mensaje;
 

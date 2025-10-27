@@ -52,7 +52,10 @@ public class DefaultCrudController<RES, RQ, E, I> {
             @RequestHeader HttpHeaders headers
     ) {
         RequestHeaders<I> rh = RequestHeaders.from(headers);
-        return primaryService.add(request, rh.getId(), rh.getTopic());
+         if (rh.getidBussines() == null) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines", HttpStatus.BAD_REQUEST, null, null));
+        }
+        return primaryService.add(request, headers);
     }
 
     @GetMapping("/all")
@@ -61,10 +64,10 @@ public class DefaultCrudController<RES, RQ, E, I> {
             @RequestParam(required = false) Map<String, String> filters
     ) {
         RequestHeaders<I> rh = RequestHeaders.from(headers);
-        if (rh.getIdbusiness() == null) {
+        if (rh.getidBussines() == null) {
             return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines", HttpStatus.BAD_REQUEST, null, null));
         }
-        return primaryService.all(rh.getTopic(), rh.getId(), rh.getIdbusiness(), filters);
+        return primaryService.all(headers, filters);
     }
 
     @PutMapping("/update")
@@ -91,5 +94,4 @@ public class DefaultCrudController<RES, RQ, E, I> {
         return primaryService.delete(rh.getId(), rh.getTopic());
     }
 }
-   
-       
+

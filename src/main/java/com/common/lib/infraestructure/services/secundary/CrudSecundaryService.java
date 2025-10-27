@@ -25,7 +25,7 @@ public interface CrudSecundaryService<RES, RQ, I> {
         return new PlantillaResponse<>(); 
     }
 
-    default PlantillaResponse<RES> add(RQ request) { 
+    default PlantillaResponse<RES> add(RQ request ,Integer idBusiness) {
         return new PlantillaResponse<>(); 
     }
 
