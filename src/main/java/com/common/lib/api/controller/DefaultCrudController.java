@@ -76,10 +76,10 @@ public class DefaultCrudController<RES, RQ, E, I> {
             @RequestHeader HttpHeaders headers
     ) {
         RequestHeaders<I> rh = RequestHeaders.from(headers);
-        if (rh.getId() == null  || rh.getTopic() == null || rh.getTopic().isBlank()) {
+        if (rh.getId() == null) {
             return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id o topic en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
-        return primaryService.update(request, (I) rh.getId(), rh.getTopic());
+        return primaryService.update(request,  headers);
     }
 
     @DeleteMapping("/delete")

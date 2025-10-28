@@ -35,11 +35,11 @@ public interface CrudPrimaryService<RES, RQ,  I> {
 
     /**
      * Actualiza una entidad existente.
-     * @param request Objeto de solicitud de actualización
-     * @param id Identificador de la entidad
-     * @param topic Identificador topico kafka y redis
+     * @param headers de aqui se optiee el id y el id de negocio
+     * @param request  entidad a actualizar
+     *
      */
-    Mono<PlantillaResponse<RES>> update(RQ request, I id, String topic);
+    Mono<PlantillaResponse<RES>> update(RQ request, HttpHeaders headers);
 
     /**
      * Elimina una entidad por su ID.

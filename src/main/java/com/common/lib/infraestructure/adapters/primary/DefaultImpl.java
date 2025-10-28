@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 
@@ -92,13 +93,22 @@ public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
     }
 
     @Override
-    public Mono<PlantillaResponse<RES>> update(RQ request, I id, String topic) {
-        return Mono.fromCallable(() -> secondary.update(request)).subscribeOn(Schedulers.boundedElastic());
+    public Mono<PlantillaResponse<RES>> update(RQ request, HttpHeaders headers) {
+        RequestHeaders<I> rh  = RequestHeaders.from(headers);
+        if (rh.getId() == null) {
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id  en los headers", HttpStatus.BAD_REQUEST, null, null));
+        }
+           return  Mono.fromCallable(() -> secondary.byId(rh.getId())).flatMap( (res) ->
+               res.getRta() ?  Mono.just(secondary.update(request)) : Mono.just(res)
+           );
+
     }
+
+
 
     @Override
     public Mono<PlantillaResponse<RES>> delete(I id, String topic) {
-        return Mono.fromCallable(() -> secondary.delete(id)).subscribeOn(Schedulers.boundedElastic());
+        return Mono.fromCallable(() -> secondary.delete(id));
     }
 }
 
