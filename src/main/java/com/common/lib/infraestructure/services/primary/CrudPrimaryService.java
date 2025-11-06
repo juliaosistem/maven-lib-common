@@ -12,10 +12,9 @@ import java.util.Map;
  * Interface se usa para implementar en adaptadores de logica de negocio para cruds.
  * @param <RES> Objeto Respuesta .
  * @param <RQ> Objeto Request .
- * @param <I> Tipo de id de la entidad puede ser String o Integer.
  */
 @Component
-public interface CrudPrimaryService<RES, RQ,  I> {
+public interface CrudPrimaryService<RES, RQ> {
 
     /**
      * Obtiene todas las entidades, con filtros opcionales.
@@ -23,12 +22,12 @@ public interface CrudPrimaryService<RES, RQ,  I> {
      *
      * @param filters Mapa de filtros personalizados (opcional)
      */
-    Mono<PlantillaResponse<RES>> all(HttpHeaders headers, Map<String, String> filters);
+    Mono<PlantillaResponse<RES>> all(Object id ,HttpHeaders headers, Map<String, String> filters);
 
     /**
      * Agrega una nueva entidad.
      * @param request Objeto de solicitud de creación
-     * @param headers Identificador del negocio
+     * @param headers Identificador del negocio ,topico kafka y redis
      *
      */
     Mono<PlantillaResponse<RES>> add(RQ request, HttpHeaders headers);
@@ -39,12 +38,12 @@ public interface CrudPrimaryService<RES, RQ,  I> {
      * @param request  entidad a actualizar
      *
      */
-    Mono<PlantillaResponse<RES>> update(RQ request, HttpHeaders headers);
+    Mono<PlantillaResponse<RES>> update(Object id,RQ request, HttpHeaders headers);
 
     /**
      * Elimina una entidad por su ID.
      * @param id Identificador de la entidad
-     * @param topic Identificador topico kafka y redis
+     * @param headers Identificador topico kafka y redis id, idBusiness
      */
-    Mono<PlantillaResponse<RES>> delete(I id, String topic);
+    Mono<PlantillaResponse<RES>> delete(Object id, HttpHeaders headers);
 }

@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Optional;
 
-public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundaryService<RES, RQ, I> {
+public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryService<RES, RQ> {
 
     protected final GenericMapper<RES, RQ, E> mapper;
     protected final AbtractError abstractError;
@@ -101,7 +101,7 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
     }
 
     @Override
-    public PlantillaResponse<RES> byId(I id) {
+    public PlantillaResponse<RES> byId(Object id) {
         long startTime = System.currentTimeMillis();
  this.abstractError.logInfo("DefaultAdapter.byId() id =" + id);
         try {
@@ -209,7 +209,7 @@ public class DefaultAdapterRepository<RES, RQ, E, I> implements CrudSecundarySer
     }
 
     @Override
-    public PlantillaResponse<RES> delete(I id) {
+    public PlantillaResponse<RES> delete(Object id) {
         long startTime = System.currentTimeMillis();
         this.abstractError.logInfo("DefaultAdapter.delete() id =" + id);
         try {

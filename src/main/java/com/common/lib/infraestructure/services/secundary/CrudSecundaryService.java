@@ -7,17 +7,15 @@ import org.springframework.stereotype.Service;
  * Interfaz secundaria CRUD genérica
  * @param <RES> Tipo de respuesta
  * @param <RQ> Tipo de request
- * @param <E> Tipo de entidad
- * @param <I> Tipo de ID
  */
 @Service
-public interface CrudSecundaryService<RES, RQ, I> {
+public interface CrudSecundaryService<RES, RQ> {
 
     default PlantillaResponse<RES> all() { 
         return new PlantillaResponse<>(); 
     }
 
-    default PlantillaResponse<RES> byId(I id) { 
+    default PlantillaResponse<RES> byId(Object id) {
         return new PlantillaResponse<>(); 
     }
 
@@ -33,7 +31,7 @@ public interface CrudSecundaryService<RES, RQ, I> {
         return new PlantillaResponse<>(); 
     }
 
-    default PlantillaResponse<RES> delete(I id) {
+    default PlantillaResponse<RES> delete(Object id) {
         return new PlantillaResponse<>(); 
     }
 }

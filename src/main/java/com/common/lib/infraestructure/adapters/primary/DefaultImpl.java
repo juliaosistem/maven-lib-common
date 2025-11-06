@@ -4,7 +4,7 @@ import com.common.lib.infraestructure.services.primary.CrudPrimaryService;
 import com.common.lib.infraestructure.services.secundary.CrudSecundaryService;
 import com.common.lib.utils.PlantillaResponse;
 import com.common.lib.utils.RequestHeaders;
-import com.common.lib.utils.Responses;
+
 import com.common.lib.utils.UserResponses;
 import com.common.lib.utils.enums.ResponseType;
 import org.springframework.http.HttpHeaders;
@@ -12,23 +12,22 @@ import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 
-public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
+public class DefaultImpl<RES, RQ> implements CrudPrimaryService<RES, RQ> {
 
-    private final CrudSecundaryService<RES, RQ, I> secondary;
+    private final CrudSecundaryService<RES, RQ> secondary;
     private final BusinessClient businessClient;
     private final Function<RQ, Integer> idBusinessExtractor;
     protected final UserResponses<RES> userResponses;
 
 
-    public DefaultImpl(CrudSecundaryService<RES, RQ, I> secondary, UserResponses<RES> userResponses) {
+    public DefaultImpl(CrudSecundaryService<RES, RQ> secondary, UserResponses<RES> userResponses) {
         this(secondary, null, null, userResponses);
     }
 
-    public DefaultImpl(CrudSecundaryService<RES, RQ, I> secondary,
+    public DefaultImpl(CrudSecundaryService<RES, RQ> secondary,
                        BusinessClient businessClient,
                        Function<RQ, Integer> idBusinessExtractor, UserResponses<RES> userResponses) {
         this.secondary = secondary;
@@ -39,13 +38,13 @@ public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
 
 
     @Override
-    public Mono<PlantillaResponse<RES>> all(HttpHeaders headers,  Map<String, String> filters) {
-        RequestHeaders<I> rh = RequestHeaders.from(headers);
+    public Mono<PlantillaResponse<RES>> all(Object id ,HttpHeaders headers,  Map<String, String> filters) {
+        var rh = RequestHeaders.from(headers);
 
-        if ( rh.getId()!= null) {
-            return Mono.fromCallable(() -> secondary.byId(rh.getId())).subscribeOn(Schedulers.boundedElastic());
-        } else if (rh.getidBussines() != null) {
-            return Mono.fromCallable(() -> secondary.byIdBusiness(rh.getidBussines())).subscribeOn(Schedulers.boundedElastic());
+        if ( id != null) {
+            return Mono.fromCallable(() -> secondary.byId(id)).subscribeOn(Schedulers.boundedElastic());
+        } else if (rh.getIdBusiness() != null) {
+            return Mono.fromCallable(() -> secondary.byIdBusiness(rh.getIdBusiness())).subscribeOn(Schedulers.boundedElastic());
         } else {
             return Mono.fromCallable(secondary::all).subscribeOn(Schedulers.boundedElastic());
         }
@@ -55,12 +54,12 @@ public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
     @Override
     public Mono<PlantillaResponse<RES>> add(RQ request, HttpHeaders headers) {
         var rh = RequestHeaders.from(headers);
-        if (rh.getidBussines() == null) {
+        if (rh.getIdBusiness() == null) {
             return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines  en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
 
         if (businessClient == null) {
-            return Mono.fromCallable(() -> secondary.add(request, rh.getidBussines()))
+            return Mono.fromCallable(() -> secondary.add(request, rh.getIdBusiness()))
                     .subscribeOn(Schedulers.boundedElastic());
         }
 
@@ -68,7 +67,7 @@ public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(res -> {
                     if (Boolean.TRUE.equals(res.getRta())) {
-                        return Mono.fromCallable(() -> secondary.add(request, rh.getidBussines()))
+                        return Mono.fromCallable(() -> secondary.add(request, rh.getIdBusiness()))
                                 .subscribeOn(Schedulers.boundedElastic());
                     } else {
                         return Mono.just(userResponses.buildResponse(ResponseType.ID_BUSSINES_NO_ENCONTRADO.getCode(), null));
@@ -87,18 +86,17 @@ public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
                                 }
                         cause = cause.getCause();
                     }
-                    // fallback genérico
                     return Mono.just(userResponses.buildResponse(ResponseType.FALLO.getCode(), null));
                 });
     }
 
     @Override
-    public Mono<PlantillaResponse<RES>> update(RQ request, HttpHeaders headers) {
-        RequestHeaders<I> rh  = RequestHeaders.from(headers);
-        if (rh.getId() == null) {
+    public Mono<PlantillaResponse<RES>> update(Object id ,RQ request, HttpHeaders headers) {
+
+        if (id == null) {
             return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id  en los headers", HttpStatus.BAD_REQUEST, null, null));
         }
-           return  Mono.fromCallable(() -> secondary.byId(rh.getId())).flatMap( (res) ->
+           return  Mono.fromCallable(() -> secondary.byId(id)).flatMap( (res) ->
                res.getRta() ?  Mono.just(secondary.update(request)) : Mono.just(res)
            );
 
@@ -107,7 +105,7 @@ public class DefaultImpl<RES, RQ, I> implements CrudPrimaryService<RES, RQ, I> {
 
 
     @Override
-    public Mono<PlantillaResponse<RES>> delete(I id, String topic) {
+    public Mono<PlantillaResponse<RES>> delete(Object id ,HttpHeaders headers) {
         return Mono.fromCallable(() -> secondary.delete(id));
     }
 }
