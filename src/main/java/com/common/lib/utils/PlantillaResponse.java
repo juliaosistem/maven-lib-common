@@ -14,14 +14,14 @@ import java.util.List;
 public class PlantillaResponse<E> {
     private Boolean rta;
     private String message;
-    private HttpStatus httpStatus;
+    private int httpStatus;
     private E data;
     private List<E> dataList;
 
     public PlantillaResponse() {
     }
 
-    public PlantillaResponse(Boolean rta, String message, HttpStatus httpStatus, E data, List<E> dataList) {
+    public PlantillaResponse(Boolean rta, String message, int httpStatus, E data, List<E> dataList) {
         this.rta = rta;
         this.message = message;
         this.httpStatus = httpStatus;
@@ -46,11 +46,11 @@ public class PlantillaResponse<E> {
         this.message = message;
     }
 
-    public HttpStatus getHttpStatus() {
+    public int getHttpStatus() {
         return httpStatus;
     }
 
-    public void setHttpStatus(HttpStatus httpStatus) {
+    public void setHttpStatus(int httpStatus) {
         this.httpStatus = httpStatus;
     }
 
@@ -77,7 +77,7 @@ public class PlantillaResponse<E> {
     public static class Builder<E> {
         private Boolean rta;
         private String message;
-        private HttpStatus httpStatus;
+        private int httpStatus;
         private E data;
         private List<E> dataList;
 
@@ -91,7 +91,7 @@ public class PlantillaResponse<E> {
             return this;
         }
 
-        public Builder<E> httpStatus(HttpStatus httpStatus) {
+        public Builder<E> httpStatus(int httpStatus) {
             this.httpStatus = httpStatus;
             return this;
         }

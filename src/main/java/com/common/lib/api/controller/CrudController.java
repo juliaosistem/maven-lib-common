@@ -1,6 +1,8 @@
 package com.common.lib.api.controller;
 
 import com.common.lib.utils.PlantillaResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -14,53 +16,28 @@ import java.util.Map;
 public interface CrudController<RES, RQ> {
 
     @PostMapping("/add")
-    Mono<PlantillaResponse<RES>> add(
+    Mono<ResponseEntity<PlantillaResponse<RES>>> add(
         @RequestBody RQ request,
-        @RequestHeader(value = "id", required = false) String id,
-        @RequestHeader("ip") String ip,
-        @RequestHeader("dominio") String dominio,
-        @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
-        @RequestHeader("proceso") String proceso,
-        @RequestHeader("topic") String topic,
-        @RequestHeader(value = "token", required = false) String token
+        @RequestHeader HttpHeaders headers
     );
 
     @GetMapping("/all")
-    Mono<PlantillaResponse<RES>> all(
-        @RequestHeader(value = "id", required = false) String id,
-        @RequestHeader("ip") String ip,
-        @RequestHeader("dominio") String dominio,
-        @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
-        @RequestHeader("proceso") String proceso,
-        @RequestHeader("topic") String topic,
-        @RequestHeader(value = "token", required = false) String token,
-        @RequestParam(required = false) Map<String, String> filters
+    Mono<ResponseEntity<PlantillaResponse<RES>>> all(
+        @RequestHeader HttpHeaders headers,
+        @RequestParam(required = false) Map<String, String> filters,
+        @RequestParam(required = false) Object id
     );
 
     @PutMapping("/update")
-    Mono<PlantillaResponse<RES>> update(
+    Mono<ResponseEntity<PlantillaResponse<RES>>> update(
         @RequestBody RQ request,
-        @RequestHeader(value = "id", required = false) String id,
-        @RequestHeader("ip") String ip,
-        @RequestHeader("dominio") String dominio,
-        @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
-        @RequestHeader("proceso") String proceso,
-        @RequestHeader("topic") String topic,
-        @RequestHeader(value = "token", required = false) String token
+        @RequestHeader HttpHeaders headers,
+        @RequestParam Object id
     );
 
     @DeleteMapping("/delete")
-    Mono<PlantillaResponse<RES>> delete(
-        @RequestHeader(value = "id", required = false) String id,
-        @RequestHeader("ip") String ip,
-        @RequestHeader("dominio") String dominio,
-        @RequestHeader("usuario") String usuario,
-        @RequestHeader(value = "idbusiness", required = false) Integer idbusiness,
-        @RequestHeader("proceso") String proceso,
-        @RequestHeader("topic") String topic,
-        @RequestHeader(value = "token", required = false) String token
+    Mono<ResponseEntity<PlantillaResponse<RES>>> delete(
+        @RequestHeader HttpHeaders headers,
+        @RequestParam(required = false) Object id
     );
 }

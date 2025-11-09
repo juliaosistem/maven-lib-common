@@ -8,6 +8,7 @@ import com.common.lib.utils.PlantillaResponse;
 import com.common.lib.utils.RequestHeaders;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -20,7 +21,7 @@ import java.util.Map;
  * @param <E>   clase entidad
  * @author  Daniel Juliao
  */
-public class DefaultCrudController<RES, RQ, E> {
+public class DefaultCrudController<RES, RQ, E> implements CrudController<RES, RQ> {
 
     protected final CrudPrimaryService<RES, RQ> primaryService;
     /**
@@ -47,54 +48,104 @@ public class DefaultCrudController<RES, RQ, E> {
     }
 
     @PostMapping("/add")
-    public Mono<PlantillaResponse<RES>> add(
+    public Mono<ResponseEntity<PlantillaResponse<RES>>> add(
             @RequestBody RQ request,
             @RequestHeader HttpHeaders headers
     ) {
         var rh = RequestHeaders.from(headers);
-         if (rh.getIdBusiness() == null) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines", HttpStatus.BAD_REQUEST, null, null));
+        if (rh.getIdBusiness() == null) {
+            PlantillaResponse<RES> body = new PlantillaResponse<>(false, "No llegó parámetro idBussines", HttpStatus.BAD_REQUEST.value(), null, null);
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body));
         }
-        return primaryService.add(request, headers);
+
+        return primaryService.add(request, headers)
+                .map(resp -> {
+                    int statusCode = resp.getHttpStatus();
+                    HttpStatus status = (statusCode > 0) ? HttpStatus.valueOf(statusCode) : HttpStatus.OK;
+                    return ResponseEntity.status(status).body(resp);
+                })
+                .onErrorResume(ex -> {
+                    Throwable cause = ex;
+                    while (cause != null) {
+                        if (cause instanceof feign.RetryableException) {
+                            PlantillaResponse<RES> body = new PlantillaResponse<RES>(false, "El endpoint business no está disponible en este momento", HttpStatus.SERVICE_UNAVAILABLE.value(), null, null);
+                            return Mono.just(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body));
+                        }
+                        cause = cause.getCause();
+                    }
+                    PlantillaResponse<RES> body = new PlantillaResponse<RES>(false, "Error interno", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, null);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body));
+                });
     }
 
     @GetMapping("/all")
-    public Mono<PlantillaResponse<RES>> all(
+    public Mono<ResponseEntity<PlantillaResponse<RES>>> all(
             @RequestHeader HttpHeaders headers,
             @RequestParam(required = false) Map<String, String> filters,
             @RequestParam(required= false) Object id
     ) {
         var rh = RequestHeaders.from(headers);
         if (rh.getIdBusiness() == null) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó el header idBussines", HttpStatus.BAD_REQUEST, null, null));
+            PlantillaResponse<RES> body = new PlantillaResponse<>(false, "No llegó el header idBussines", HttpStatus.BAD_REQUEST.value(), null, null);
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body));
         }
-        return primaryService.all(id,headers, filters);
+
+        return primaryService.all(id, headers, filters)
+                .map(resp -> {
+                    int statusCode = resp.getHttpStatus();
+                    HttpStatus status = (statusCode > 0) ? HttpStatus.valueOf(statusCode) : HttpStatus.OK;
+                    return ResponseEntity.status(status).body(resp);
+                })
+                .onErrorResume(ex -> {
+                    PlantillaResponse<RES> body = new PlantillaResponse<>(false, "Error interno", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, null);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body));
+                });
     }
 
     @PutMapping("/update")
-    public Mono<PlantillaResponse<RES>> update(
+    public Mono<ResponseEntity<PlantillaResponse<RES>>> update(
             @RequestBody RQ request,
             @RequestHeader HttpHeaders headers,
             @RequestParam Object id
 
     ) {
         if (id == null) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id o topic en los headers", HttpStatus.BAD_REQUEST, null, null));
+            PlantillaResponse<RES> body = new PlantillaResponse<>(false, "No llegó parámetro id o topic en los headers", HttpStatus.BAD_REQUEST.value(), null, null);
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body));
         }
-        return primaryService.update(id,request,  headers);
+        return primaryService.update(id, request, headers)
+                .map(resp -> {
+                    int statusCode = resp.getHttpStatus();
+                    HttpStatus status = (statusCode > 0) ? HttpStatus.valueOf(statusCode) : HttpStatus.OK;
+                    return ResponseEntity.status(status).body(resp);
+                })
+                .onErrorResume(ex -> {
+                    PlantillaResponse<RES> body = new PlantillaResponse<>(false, "Error interno", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, null);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body));
+                });
     }
 
     @DeleteMapping("/delete")
-    public Mono<PlantillaResponse<RES>> delete(
+    public Mono<ResponseEntity<PlantillaResponse<RES>>> delete(
             @RequestHeader HttpHeaders headers,
             @RequestParam(required = false) Object id
     ) {
 
         if (id == null ) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id", HttpStatus.BAD_REQUEST, null, null));
+            PlantillaResponse<RES> body = new PlantillaResponse<>(false, "No llegó parámetro id", HttpStatus.BAD_REQUEST.value(), null, null);
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body));
         }
 
-        return primaryService.delete(id, headers);
+        return primaryService.delete(id, headers)
+                .map(resp -> {
+                    int statusCode = resp.getHttpStatus();
+                    HttpStatus status = (statusCode > 0) ? HttpStatus.valueOf(statusCode) : HttpStatus.OK;
+                    return ResponseEntity.status(status).body(resp);
+                })
+                .onErrorResume(ex -> {
+                    PlantillaResponse<RES> body = new PlantillaResponse<>(false, "Error interno", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, null);
+                    return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body));
+                });
     }
 }
 

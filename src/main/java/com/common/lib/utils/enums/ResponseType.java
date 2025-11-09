@@ -5,23 +5,23 @@ import org.springframework.http.HttpStatus;
 
 public enum ResponseType {
 
-    CREATED(1, MensajesRespuesta.CREADO.getMensaje(), true, HttpStatus.CREATED),
-    UPDATED(2, MensajesRespuesta.ACTUALIZADO.getMensaje(), true, HttpStatus.OK),
-    FALLO(3, MensajesRespuesta.FALLO.getMensaje(), false, HttpStatus.INTERNAL_SERVER_ERROR),
-    EMAIL_NO_ENCONTRADO(4 ,MensajesRespuesta.EMAIL_NO_ENCONTRADO.getMensaje(),false,HttpStatus.OK),
-    USER_ISFOUND(5, MensajesRespuesta.USER_ISFOUND.getMensaje(), false, HttpStatus.OK),
-    USER_LOGEADO(6, MensajesRespuesta.USER_LOGEADO.getMensaje(), false, HttpStatus.OK),
-    EMAIL_VALIDATION_FAIL(7, EmailValidationPattern.EMAIL_VALIDATION_FAIL.getPattern(), false, HttpStatus.BAD_REQUEST),
-    EMAIL_NOT_FOUD(8,  EmailValidationPattern.EMAIL_NOT_FOUD.getPattern(), false, HttpStatus.OK),
+    CREATED(1, MensajesRespuesta.CREADO.getMensaje(), true, HttpStatus.CREATED.value()),
+    UPDATED(2, MensajesRespuesta.ACTUALIZADO.getMensaje(), true, HttpStatus.OK.value()),
+    FALLO(3, MensajesRespuesta.FALLO.getMensaje(), false, HttpStatus.INTERNAL_SERVER_ERROR.value()),
+    EMAIL_NO_ENCONTRADO(4 ,MensajesRespuesta.EMAIL_NO_ENCONTRADO.getMensaje(),false,HttpStatus.OK.value()),
+    USER_ISFOUND(5, MensajesRespuesta.USER_ISFOUND.getMensaje(), false, HttpStatus.OK.value()),
+    USER_LOGEADO(6, MensajesRespuesta.USER_LOGEADO.getMensaje(), false, HttpStatus.OK.value()),
+    EMAIL_VALIDATION_FAIL(7, EmailValidationPattern.EMAIL_VALIDATION_FAIL.getPattern(), false, HttpStatus.BAD_REQUEST.value()),
+    EMAIL_NOT_FOUD(8,  EmailValidationPattern.EMAIL_NOT_FOUD.getPattern(), false, HttpStatus.OK.value()),
 
-    PASSWORD_VALIDATION_FAIL(9, PasswordValidationPattern.PASSWORD_VALIDATION_FAIL.getPattern(), false, HttpStatus.BAD_REQUEST),
-    GET(10,MensajesRespuesta.GET.getMensaje(),true,HttpStatus.OK),
-    NO_ENCONTRADO(11, MensajesRespuesta.NO_ENCONTRADO.getMensaje(), false, HttpStatus.NOT_FOUND),
-    FALLO_CREATE_PHONE(12, MensajesRespuesta.FALLO_CREATE_PHONE.getMensaje(), false, HttpStatus.BAD_REQUEST),
-    FALLO_CREATE_DATOS_USER(13,MensajesRespuesta.FALLO_CREATE_DATOS_USER.getMensaje() ,false ,HttpStatus.BAD_REQUEST ),
-    DELETED(14,MensajesRespuesta.DELETED.getMensaje(),true, HttpStatus.OK),
-    ID_BUSSINES_NO_ENCONTRADO(15, MensajesRespuesta.ID_BUSSINES_NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK),
-    FEING_BUSSINES_FALLO(16,MensajesRespuesta.FEING_BUSSINES_FALLO.getMensaje() ,false ,HttpStatus.SERVICE_UNAVAILABLE );
+    PASSWORD_VALIDATION_FAIL(9, PasswordValidationPattern.PASSWORD_VALIDATION_FAIL.getPattern(), false, HttpStatus.BAD_REQUEST.value()),
+    GET(10,MensajesRespuesta.GET.getMensaje(),true,HttpStatus.OK.value()),
+    NO_ENCONTRADO(11, MensajesRespuesta.NO_ENCONTRADO.getMensaje(), false, HttpStatus.NOT_FOUND.value()),
+    FALLO_CREATE_PHONE(12, MensajesRespuesta.FALLO_CREATE_PHONE.getMensaje(), false, HttpStatus.BAD_REQUEST.value()),
+    FALLO_CREATE_DATOS_USER(13,MensajesRespuesta.FALLO_CREATE_DATOS_USER.getMensaje() ,false ,HttpStatus.BAD_REQUEST.value()),
+    DELETED(14,MensajesRespuesta.DELETED.getMensaje(),true, HttpStatus.OK.value()),
+    ID_BUSSINES_NO_ENCONTRADO(15, MensajesRespuesta.ID_BUSSINES_NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK.value()),
+    FEING_BUSSINES_FALLO(16,MensajesRespuesta.FEING_BUSSINES_FALLO.getMensaje() ,false ,HttpStatus.SERVICE_UNAVAILABLE.value());
 
 
 
@@ -29,9 +29,9 @@ public enum ResponseType {
 
     private final String message;
     private final boolean isRta;
-    private final HttpStatus httpStatus;
+    private final int httpStatus;
 
-    ResponseType(int code, String message, boolean isRta, HttpStatus httpStatus) {
+    ResponseType(int code, String message, boolean isRta, int httpStatus) {
         this.code = code;
         this.message = message;
         this.isRta = isRta;
@@ -51,7 +51,7 @@ public enum ResponseType {
         return isRta;
     }
 
-    public HttpStatus getHttpStatus() {
+    public int getHttpStatus() {
         return httpStatus;
     }
 

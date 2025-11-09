@@ -55,7 +55,7 @@ public class DefaultImpl<RES, RQ> implements CrudPrimaryService<RES, RQ> {
     public Mono<PlantillaResponse<RES>> add(RQ request, HttpHeaders headers) {
         var rh = RequestHeaders.from(headers);
         if (rh.getIdBusiness() == null) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines  en los headers", HttpStatus.BAD_REQUEST, null, null));
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro idBussines  en los headers", HttpStatus.BAD_REQUEST.value(), null, null));
         }
 
         if (businessClient == null) {
@@ -81,7 +81,7 @@ public class DefaultImpl<RES, RQ> implements CrudPrimaryService<RES, RQ> {
                             userResponses.buildResponse(ResponseType.FEING_BUSSINES_FALLO.getCode(), null);
                             return Mono.just(new PlantillaResponse<>(false,
                                     "El endpoint business no está disponible en este momento",
-                                    HttpStatus.SERVICE_UNAVAILABLE, null, null));
+                                    HttpStatus.SERVICE_UNAVAILABLE.value(), null, null));
                        
                                 }
                         cause = cause.getCause();
@@ -94,7 +94,7 @@ public class DefaultImpl<RES, RQ> implements CrudPrimaryService<RES, RQ> {
     public Mono<PlantillaResponse<RES>> update(Object id ,RQ request, HttpHeaders headers) {
 
         if (id == null) {
-            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id  en los headers", HttpStatus.BAD_REQUEST, null, null));
+            return Mono.just(new PlantillaResponse<>(false, "No llegó parámetro id  en los headers", HttpStatus.BAD_REQUEST.value(), null, null));
         }
            return  Mono.fromCallable(() -> secondary.byId(id)).flatMap( (res) ->
                res.getRta() ?  Mono.just(secondary.update(request)) : Mono.just(res)
