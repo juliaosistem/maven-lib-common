@@ -17,8 +17,9 @@ import java.util.UUID;
 @Builder
 public class RegisterUserDTO {
 
-        @JsonProperty("idBussines")
-        private Long idBussines;
+        @JsonProperty("idBusiness")
+        private Integer idBusiness;
+
         @JsonProperty("estado")
         private String estado;
         @JsonProperty("id")
