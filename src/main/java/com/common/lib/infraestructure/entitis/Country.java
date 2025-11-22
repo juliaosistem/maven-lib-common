@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 @Entity
 @Setter
+@Getter
 @Table(name = "paises")
 public class Country {
     @Column(name = "id_Pais")

@@ -28,8 +28,7 @@ public class User {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private UUID id_usuario;
 
-    @Column(name = "id_negocio")
-    private  Long idBussines;
+    private  Integer idBusiness;
 
     @Column(name = "saldo")
     private Double balance;
