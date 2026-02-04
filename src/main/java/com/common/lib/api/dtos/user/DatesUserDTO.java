@@ -24,7 +24,7 @@ public class DatesUserDTO {
     private List<PhoneDTO> phone;
     private String idUrl;
     private List<AddresDTO> addresses;
-    private UUID estado;
+    private Integer estado;
     private String nombreRol;
 
 }

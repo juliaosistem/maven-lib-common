@@ -84,11 +84,6 @@ public class DefaultCrudController<RES, RQ, E> implements CrudController<RES, RQ
             @RequestParam(required = false) Map<String, String> filters,
             @RequestParam(required= false) Object id
     ) {
-        var rh = RequestHeaders.from(headers);
-        if (rh.getIdBusiness() == null) {
-            PlantillaResponse<RES> body = new PlantillaResponse<>(false, "No llegó el header idBussines", HttpStatus.BAD_REQUEST.value(), null, null);
-            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body));
-        }
 
         return primaryService.all(id, headers, filters)
                 .map(resp -> {

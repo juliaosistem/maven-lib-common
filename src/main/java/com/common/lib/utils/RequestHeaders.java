@@ -29,10 +29,12 @@ public class RequestHeaders{
         rh.dominio = headers.getFirst("dominio");
         rh.usuario = headers.getFirst("usuario");
         String idb = headers.getFirst("idBusiness");
-        if (idb == null) {
-            idb = headers.getFirst("idBusiness");
+
+        try {
+            rh.idBusiness = idb != null ? Integer.parseInt(idb) : null;
+        } catch (NumberFormatException e) {
+            rh.idBusiness = null;
         }
-        rh.idBusiness = idb != null ? Integer.parseInt(idb) : null;
         rh.proceso = headers.getFirst("proceso");
         rh.topic = headers.getFirst("topic");
         String auth = headers.getFirst("Authorization");
