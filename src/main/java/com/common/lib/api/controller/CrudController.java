@@ -25,7 +25,8 @@ public interface CrudController<RES, RQ> {
     Mono<ResponseEntity<PlantillaResponse<RES>>> all(
         @RequestHeader HttpHeaders headers,
         @RequestParam(required = false) Map<String, String> filters,
-        @RequestParam(required = false) Object id
+        @RequestParam(required = false) Object id,
+        Boolean isValidateIdBusiness
     );
 
     @PutMapping("/update")

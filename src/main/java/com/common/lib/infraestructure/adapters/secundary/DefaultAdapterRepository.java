@@ -103,25 +103,45 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
     @Override
     public PlantillaResponse<RES> byId(Object id) {
         long startTime = System.currentTimeMillis();
- this.abstractError.logInfo("DefaultAdapter.byId() id =" + id);
+        this.abstractError.logInfo("DefaultAdapter.byId() id =" + id);
         try {
+            Object searchId = id;
+            if (id instanceof String && isValidUUID((String) id)) {
+                 searchId = java.util.UUID.fromString((String) id);
+            }
 
-            Optional<E> opt = defaultRepository.findByIdSafe(id);
+            Optional<E> opt = defaultRepository.findByIdSafe(searchId);
             if (opt.isPresent()) {
-        RES res = (mapperConRequest != null)
-            ? mapperConRequest.mapToRes(opt.get())
-            : mapper.mapToRes(opt.get(), resClass);
+                RES res = (mapperConRequest != null)
+                    ? mapperConRequest.mapToRes(opt.get())
+                    : mapper.mapToRes(opt.get(), resClass);
                 return userResponses.buildResponse(ResponseType.GET.getCode(), res);
             }
             return userResponses.buildResponse(ResponseType.NO_ENCONTRADO.getCode(), null);
+        } catch (IllegalArgumentException e) {
+            abstractError.logInfo("DefaultAdapter.byId() - ID invalido o incompatible: " + e.getMessage());
+            return userResponses.buildResponse(ResponseType.BAD_REQUEST.getCode(), null);
         } catch (Exception e) {
+            if (e.getCause() instanceof IllegalArgumentException || (e.getMessage() != null && e.getMessage().contains("Supplied id had wrong type"))) {
+                abstractError.logInfo("DefaultAdapter.byId() - ID invalido o incompatible (wrapped): " + e.getMessage());
+                return userResponses.buildResponse(ResponseType.BAD_REQUEST.getCode(), null);
+            }
             abstractError.logError(e);
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logInfo("DefaultAdapter.byId() - Tiempo de ejecución: " + duration + " ms");
+        }
+    }
+
+    private boolean isValidUUID(String str) {
+        try {
+            java.util.UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
     }
 

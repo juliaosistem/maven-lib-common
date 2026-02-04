@@ -15,7 +15,8 @@ public enum MensajesRespuesta {
     FALLO_CREATE_DATOS_USER("Fallo al crear datos de usuario"),
     DELETED("Eliminado(a) correctamente"),
     ID_BUSSINES_NO_ENCONTRADO("El negocio con el id especificado no existe"),
-    FEING_BUSSINES_FALLO("El endpoint business no está disponible en este momento");
+    FEING_BUSSINES_FALLO("El endpoint business no está disponible en este momento"),
+    SOLICITUD_INCORRECTA("Solicitud incorrecta o parámetros inválidos");
 
     private final String mensaje;
 

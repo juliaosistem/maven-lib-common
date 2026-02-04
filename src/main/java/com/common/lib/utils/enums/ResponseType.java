@@ -21,7 +21,8 @@ public enum ResponseType {
     FALLO_CREATE_DATOS_USER(13,MensajesRespuesta.FALLO_CREATE_DATOS_USER.getMensaje() ,false ,HttpStatus.BAD_REQUEST.value()),
     DELETED(14,MensajesRespuesta.DELETED.getMensaje(),true, HttpStatus.OK.value()),
     ID_BUSSINES_NO_ENCONTRADO(15, MensajesRespuesta.ID_BUSSINES_NO_ENCONTRADO.getMensaje(), false, HttpStatus.OK.value()),
-    FEING_BUSSINES_FALLO(16,MensajesRespuesta.FEING_BUSSINES_FALLO.getMensaje() ,false ,HttpStatus.SERVICE_UNAVAILABLE.value());
+    FEING_BUSSINES_FALLO(16,MensajesRespuesta.FEING_BUSSINES_FALLO.getMensaje() ,false ,HttpStatus.SERVICE_UNAVAILABLE.value()),
+    BAD_REQUEST(17, MensajesRespuesta.SOLICITUD_INCORRECTA.getMensaje(), false, HttpStatus.BAD_REQUEST.value());
 
 
 
