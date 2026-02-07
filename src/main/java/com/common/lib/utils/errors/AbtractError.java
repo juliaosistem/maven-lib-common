@@ -6,6 +6,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Log4j2
 @AllArgsConstructor
@@ -20,6 +22,12 @@ public  class AbtractError extends  Exception  {
 
     public void logInfo(String message) {
         logger.info(message, getClass().getName());
+    }
+
+    public void logExecutionTime(String context, long startTime) {
+        long duration = System.currentTimeMillis() - startTime;
+        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy : HH:mm:ss"));
+        logInfo(context + " - Tiempo de ejecución: " + duration + " ms - fecha de ejecucion " + formattedDate);
     }
 
 }

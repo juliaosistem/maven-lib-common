@@ -9,7 +9,7 @@ public enum ResponseType {
     UPDATED(2, MensajesRespuesta.ACTUALIZADO.getMensaje(), true, HttpStatus.OK.value()),
     FALLO(3, MensajesRespuesta.FALLO.getMensaje(), false, HttpStatus.INTERNAL_SERVER_ERROR.value()),
     EMAIL_NO_ENCONTRADO(4 ,MensajesRespuesta.EMAIL_NO_ENCONTRADO.getMensaje(),false,HttpStatus.OK.value()),
-    USER_ISFOUND(5, MensajesRespuesta.USER_ISFOUND.getMensaje(), false, HttpStatus.OK.value()),
+    USER_ISFOUND(5, MensajesRespuesta.USER_ISFOUND.getMensaje(), true, HttpStatus.OK.value()),
     USER_LOGEADO(6, MensajesRespuesta.USER_LOGEADO.getMensaje(), false, HttpStatus.OK.value()),
     EMAIL_VALIDATION_FAIL(7, EmailValidationPattern.EMAIL_VALIDATION_FAIL.getPattern(), false, HttpStatus.BAD_REQUEST.value()),
     EMAIL_NOT_FOUD(8,  EmailValidationPattern.EMAIL_NOT_FOUD.getPattern(), false, HttpStatus.OK.value()),

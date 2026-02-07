@@ -94,9 +94,7 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logExecutionTime("DefaultAdapter.all()", startTime);
         }
     }
 
@@ -130,9 +128,7 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.byId() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logExecutionTime("DefaultAdapter.byId()", startTime);
         }
     }
 
@@ -172,9 +168,7 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logExecutionTime("DefaultAdapter.add()", startTime);
         }
     }
 
@@ -221,9 +215,7 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logExecutionTime("DefaultAdapter.update()", startTime);
         }
 
     }
@@ -242,9 +234,7 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logExecutionTime("DefaultAdapter.delete()", startTime);
         }
     }
 
@@ -267,12 +257,9 @@ public class DefaultAdapterRepository<RES, RQ, E> implements CrudSecundaryServic
             return userResponses.buildResponse(ResponseType.FALLO.getCode(), null);
         }
         finally {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            this.abstractError.logInfo("DefaultAdapter.all() - Tiempo de ejecución: " + duration + " ms");
+            this.abstractError.logExecutionTime("DefaultAdapter.byIdBusiness()", startTime);
         }
     }
 
 }
-
 
