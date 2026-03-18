@@ -8,7 +8,7 @@ target/maven-status/
 !**/src/test/**/target/
 .mvn
 hs_err_pid*.log
-
+app.log
 ### STS ###
 .apt_generated
 .classpath
