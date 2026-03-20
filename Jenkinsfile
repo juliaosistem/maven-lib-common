@@ -1,27 +1,27 @@
 pipeline {
-    agent {
-        kubernetes {
+        agent {
+                kubernetes {
                         yaml """
 apiVersion: v1
 kind: Pod
 spec:
-  securityContext:
-    runAsUser: 0
-  containers:
-    - name: maven
-      image: maven:3.9.9-eclipse-temurin-21
+    securityContext:
+        runAsUser: 0
+    containers:
+        - name: maven
+            image: maven:3.9.9-eclipse-temurin-21
             command: ["cat"]
-      tty: true
-      volumeMounts:
+            tty: true
+            volumeMounts:
+                - name: maven-cache
+                    mountPath: /root/.m2
+    volumes:
         - name: maven-cache
-          mountPath: /root/.m2
-  volumes:
-    - name: maven-cache
-      persistentVolumeClaim:
-        claimName: maven-pvc
+            persistentVolumeClaim:
+                claimName: maven-pvc
 """
+                }
         }
-    }
 
     environment {
         NEXUS_MAVEN_BASE_URL = 'https://nexus.twincode.site'
