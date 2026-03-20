@@ -10,7 +10,8 @@ spec:
     containers:
         - name: maven
             image: maven:3.9.9-eclipse-temurin-21
-            command: ["cat"]
+            command:
+                - cat
             tty: true
             volumeMounts:
                 - name: maven-cache
