@@ -72,15 +72,15 @@ pipeline {
                         // Repository target can be switched automatically if a SNAPSHOT version is used.
                         env.NEXUS_MAVEN_REPOSITORY = resolvedVersion.toUpperCase().endsWith('-SNAPSHOT') ? 'maven-snapshots' : 'maven-releases'
                         currentBuild.displayName = "#${env.BUILD_NUMBER} ${env.BRANCH_NAME} ${env.ARTIFACT_VERSION}"
-                        echo "Version de artefacto: ${env.ARTIFACT_VERSION}"
+                        echo "Version de artefacto: ${resolvedVersion}"
                         echo "Repositorio destino Nexus: ${env.NEXUS_MAVEN_REPOSITORY}"
-                    }
 
-                    sh '''
-                        set -e
-                        mvn -B -ntp -f "$COMMON_PARENT_POM" versions:set -DnewVersion="$ARTIFACT_VERSION" -DgenerateBackupPoms=false
-                        mvn -B -ntp -f "$COMMON_LIB_POM" versions:set -DnewVersion="$ARTIFACT_VERSION" -DgenerateBackupPoms=false
-                    '''
+                        sh """
+                            set -e
+                            mvn -B -ntp -f \"$COMMON_PARENT_POM\" versions:set -DnewVersion=\"${resolvedVersion}\" -DgenerateBackupPoms=false
+                            mvn -B -ntp -f \"$COMMON_LIB_POM\" versions:set -DnewVersion=\"${resolvedVersion}\" -DgenerateBackupPoms=false
+                        """
+                    }
                 }
             }
         }
