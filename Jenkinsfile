@@ -43,19 +43,31 @@ pipeline {
             steps {
                 container('maven') {
                     script {
-                        if (env.BRANCH_NAME == 'develop') {
-                            env.ARTIFACT_VERSION = "develop.${env.BUILD_NUMBER}"
-                        } else {
+                        def branchName = (env.BRANCH_NAME ?: '').trim()
+                        def buildNumber = env.BUILD_NUMBER ?: '0'
+
+                        if (branchName == 'develop' || branchName.endsWith('/develop')) {
+                            env.ARTIFACT_VERSION = "develop.${buildNumber}"
+                        } else if (branchName == 'master' || branchName.endsWith('/master')) {
                             sh 'git fetch --tags --force'
                             def tagAtHead = sh(script: "git tag --points-at HEAD | head -n 1", returnStdout: true).trim()
                             if (!tagAtHead) {
                                 error('En branch master se requiere un tag en el commit (ej: v1.2.3).')
                             }
                             env.ARTIFACT_VERSION = tagAtHead.startsWith('v') ? tagAtHead.substring(1) : tagAtHead
+                        } else {
+                            // Fallback defensivo para ramas no estandar.
+                            def safeBranch = branchName ? branchName.replaceAll('[^A-Za-z0-9._-]', '-') : 'unknown'
+                            env.ARTIFACT_VERSION = "${safeBranch}.${buildNumber}"
+                        }
+
+                        def resolvedVersion = (env.ARTIFACT_VERSION ?: '').trim()
+                        if (!resolvedVersion) {
+                            error('No se pudo resolver ARTIFACT_VERSION para la build actual.')
                         }
 
                         // Repository target can be switched automatically if a SNAPSHOT version is used.
-                        env.NEXUS_MAVEN_REPOSITORY = env.ARTIFACT_VERSION.toUpperCase().endsWith('-SNAPSHOT') ? 'maven-snapshots' : 'maven-releases'
+                        env.NEXUS_MAVEN_REPOSITORY = resolvedVersion.toUpperCase().endsWith('-SNAPSHOT') ? 'maven-snapshots' : 'maven-releases'
                         currentBuild.displayName = "#${env.BUILD_NUMBER} ${env.BRANCH_NAME} ${env.ARTIFACT_VERSION}"
                         echo "Version de artefacto: ${env.ARTIFACT_VERSION}"
                         echo "Repositorio destino Nexus: ${env.NEXUS_MAVEN_REPOSITORY}"
