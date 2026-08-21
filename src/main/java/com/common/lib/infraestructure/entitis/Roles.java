@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,10 +21,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "roles")
 public class Roles {
-    @Column(name = "id_rol")
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue
+    @UuidGenerator
+    @Column(name = "id_rol")
     private UUID idRol;
 
     @Enumerated(EnumType.STRING)

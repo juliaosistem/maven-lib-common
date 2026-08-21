@@ -7,6 +7,7 @@ target/maven-status/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .mvn
+logs/
 hs_err_pid*.log
 app.log
 ### STS ###
