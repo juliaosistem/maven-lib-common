@@ -17,11 +17,6 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class BaseEntities {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
     @Column(name = "id_business")
     private Integer idBusiness;
 

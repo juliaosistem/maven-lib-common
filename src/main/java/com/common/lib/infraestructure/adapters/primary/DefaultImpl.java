@@ -44,9 +44,10 @@ public class DefaultImpl<RES, RQ> implements CrudPrimaryService<RES, RQ> {
         if ( id != null) {
             return Mono.fromCallable(() -> secondary.byId(id)).subscribeOn(Schedulers.boundedElastic());
         } else if (rh.getIdBusiness() != null) {
-            return Mono.fromCallable(() -> secondary.byIdBusiness(rh.getIdBusiness())).subscribeOn(Schedulers.boundedElastic());
+            return Mono.fromCallable(() -> secondary.byIdBusiness(rh.getIdBusiness(), filters))
+                    .subscribeOn(Schedulers.boundedElastic());
         } else {
-            return Mono.fromCallable(secondary::all).subscribeOn(Schedulers.boundedElastic());
+            return Mono.fromCallable(() -> secondary.all(filters)).subscribeOn(Schedulers.boundedElastic());
         }
     }
 

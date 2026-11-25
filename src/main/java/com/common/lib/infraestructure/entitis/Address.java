@@ -17,11 +17,11 @@ import java.util.UUID;
 @Table(name = "direcciones")
 @Getter
 @Setter
-public class Address {
+public class Address extends BaseEntities {
 
     @Column(name = "id_detalle_direcciones")
     @Id
-    @UuidGenerator
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID idAddress;
 
     @Column(name = "direccion")

@@ -13,7 +13,7 @@ import jakarta.validation.constraints.NotEmpty;
 @Builder
 @Entity
 @Table(name = "estados")
-public class Estados {
+public class Estados extends BaseEntities{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

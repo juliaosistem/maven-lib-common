@@ -2,7 +2,8 @@ package com.common.lib.infraestructure.entitis;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,11 +16,11 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "datos_usuarios")
-public class DatesUser {
+public class DatesUser extends BaseEntities {
     @Column(name = "id_datos_usuario")
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID idDatesUser;
 
     @Column(name = "primer_nombre")
@@ -36,6 +37,7 @@ public class DatesUser {
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "datesUser")
+    @BatchSize(size = 25)
     private List<Address> addresses;
 
     @OneToOne
@@ -45,21 +47,5 @@ public class DatesUser {
     @ManyToOne
     @JoinColumn(name = "id_estado")
     private Estados state;
-
-
-//    @Override
-//    public String toString() {
-//        return "DatesUser{" +
-//                "idDatesUser=" + idDatesUser +
-//                ", firstName='" + firstName + '\'' +
-//                ", idUrl='" + idUrl + '\'' +
-//                ", secondName='" + secondName + '\'' +
-//                ", phone=" + phone +
-//                ", addresses=" + addresses +
-//                ", user=" + (user != null ? user.getDatesUser() : null) +
-//                ", state=" + (state != null ? state.getIdEstate() : null) +
-//                '}';
-//    }
-
 
 }

@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 @Entity
 @Table(name = "usuarios_rol")
-public class UserRol {
+public class UserRol extends BaseEntities {
 
     @EmbeddedId
     private UserRolPk userRolPk;

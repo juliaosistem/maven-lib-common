@@ -6,4 +6,7 @@ public enum RolEnum {
         COSTURERO,
         USUARIO,
         SUPER_ADMIN,
+
+        COORDINADOR_BODEGA,
+        VENDEDOR,
 }

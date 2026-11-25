@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Pattern;
 @Builder
 @Entity
 @Table(name = "phones")
-public class Phone {
+public class Phone  extends BaseEntities{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

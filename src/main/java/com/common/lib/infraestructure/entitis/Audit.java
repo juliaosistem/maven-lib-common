@@ -21,9 +21,8 @@ public class Audit {
 
     @Id
     @GeneratedValue
-    @UuidGenerator
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     private UUID id;
-
     private String ip;
     private String dominio;
     private String usuario;

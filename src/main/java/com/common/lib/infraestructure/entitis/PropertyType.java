@@ -16,9 +16,9 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "tipo_inmueble")
-public class PropertyType {
+public class PropertyType extends BaseEntities{
     @Id
-    @UuidGenerator
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
     @Column(name = "id_tipo_inmueble", unique = true, nullable = false)
     private UUID idPropertyType;
 

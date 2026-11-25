@@ -2,6 +2,7 @@ package com.common.lib.infraestructure.services.secundary;
 
 import com.common.lib.utils.PlantillaResponse;
 import org.springframework.stereotype.Service;
+import java.util.Map;
 
 /**
  * Interfaz secundaria CRUD genérica
@@ -15,12 +16,20 @@ public interface CrudSecundaryService<RES, RQ> {
         return new PlantillaResponse<>(); 
     }
 
+    default PlantillaResponse<RES> all(Map<String, String> filters) {
+        return all();
+    }
+
     default PlantillaResponse<RES> byId(Object id) {
         return new PlantillaResponse<>(); 
     }
 
     default PlantillaResponse<RES> byIdBusiness(Integer idBusiness) { 
         return new PlantillaResponse<>(); 
+    }
+
+    default PlantillaResponse<RES> byIdBusiness(Integer idBusiness, Map<String, String> filters) {
+        return byIdBusiness(idBusiness);
     }
 
     default PlantillaResponse<RES> add(RQ request ,Integer idBusiness) {
